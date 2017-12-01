@@ -1,3 +1,7 @@
+
+
+var MongoClient = require('mongodb').MongoClient;
+var url = "mongodb://csc309f:csc309fall@ds117316.mlab.com:17316/csc309db";
 var express = require('express');
 
 var app = express();
@@ -52,6 +56,56 @@ app.post('/process', function(req,res){
   console.log('CSRF token : ' + req.body._csrf);
   console.log('Email : ' + req.body.email);
   console.log('Question : ' + req.body.ques);
+
+
+  MongoClient.connect(url, function(err,res){
+        if(err) console.log(err)
+            console.log("Database connected");
+            db = res
+            //add documents
+            var data = {user: req.body.email, password: req.body.ques}
+
+            // Add functions here
+            // db.collection("suke1_COLLECTION").insertOne(data, function(err,res){
+            //     if (err) {
+            //         console.log(err);
+            //     }
+            //     else{
+            //         console.log("1 document inserted");
+            //         db.close();
+            //     }
+            // });
+
+            //TASK 1 inserting an array (use insert not insertone)
+            db.collection("suke1test_COLLECTION").insertOne(data, function(err,res){
+                if (err) {
+                    console.log(err);
+                }
+                else{
+                    console.log("user inserted");
+                    db.close();
+                }
+            });
+
+            console.log("db find")
+            //console.log(db.collection("csc309db.suke1test_COLLECTION").find({}));
+           db.collection("suke1test_COLLECTION").find({}).toArray(function (err, docs) {
+        if (err) {
+            console.log('Error');
+            console.log(err);
+            res.end();
+        }
+        else {
+            console.log('Success');
+            console.log(docs);
+        }
+    });
+            //console.log(db.collection("suke1purchases_COLLECTION").find({name: true, address: true}));
+            //.log(db.collection("suke1purchases_COLLECTION").find({}, {_id: false, name: true, address: true, ph_num: false, amount: false}) );
+            //console.log(db.collection("suke1purchases_COLLECTION").find({}, {_id:false, name: true, address: true}) );
+    });
+
+
   res.redirect(303, '/thankyou');
 });
 
