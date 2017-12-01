@@ -1,3 +1,56 @@
-<div class="page-header">
-<h3>Welcome to my Express Tutorial</h3>
+<div id="view1">
+    <div class="row">
+                <div class="jumbotron">
+                    <h1>PetFinder <span class="glyphicon glyphicon-globe"></span></h1>      
+                    <p>Find and adopt your new friend today!</p>
+                    <div class="row search-box-frame">
+                        <div class="col-md-8">
+                        <input type="text" class="form-control search-box" placeholder="Enter your location e.g florida" id="search_location">
+                        </div>
+                        <div class="col-md-4">
+                        <button type="submit" class="search-box-button" id="SearchButton">Search</button>
+                        </div>
+                    </div>
+                    <!-- <button onclick="showView2()">show view 2</button>
+                    <button id="florida">FL</button> -->
+                    <h2 id="No_Result"></h2>
+                    <p id="example_search"></p>
+                </div>
+                <div class="center-text">
+                <img class="pet-logo" src="images/petsbest-logo.png">
+                </div>
+                
+            </div>
+        </div>
+        <div id="view2">
+            <div class="jumbotron purple-background">
+                <h1 class="">Adoptable Pets Near You!</h1>
+                <h2 id="Result"></h2>
+                <p><button id="view2toview1" class="btn btn-info">Back to Search</button></p>
+                <ul id="posts">
+                </ul>
+            </div>
+        </div>
+          
+
+        </div>
+        <div id="view3">
+            <div class="light-blue-background">
+                <button id="view3toview2" class="btn btn-info">Back to Results</button>
+                <div id="petprofilename" class="center-text"></div>
+                <ul id="singlepetinfo"></ul>
+            </div>
+        </div>
+
+         <div id="loading">
+            <div class="row">
+                <div class="col-lg-5 col-md-5 col-sm-5"></div>
+                <div class="col-lg-2 col-md-2 col-sm-3">
+                    <img src="images/loading-wheel.gif">
+                    <p>Loading...</p>
+                </div>
+                <div class="col-lg-5 col-md-5 col-sm-5"></div>
+            </div>
+        </div>
 </div>
+ 
