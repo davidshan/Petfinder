@@ -6,6 +6,12 @@ var newpet_list;
 var current_view=1;
 
 
+
+//Favorite a pet
+function Favorite(ID) {
+	console.log(ID)
+}
+
 function getPetInfo(id) {
     return new Promise((resolve, reject) => {
         $.ajax({
@@ -188,6 +194,7 @@ function append_new_entries(list_of_stuff) {
                                         <div class=\"search-result-pet-info hidden-xs\">\
                                             <br />\
                                             <a class='title' id="+ list_of_stuff[i].id +">Hi I'm "+ list_of_stuff[i].name +"!</a>\
+											<button onclick=\"Favorite("+list_of_stuff[i].id+")\" class=\"btn btn-info\">Favorite This Pet</button>\
                                             <h4><b>Size:</b> "+ list_of_stuff[i].size +"</h4>\
                                             <h4><b>Sex:</b> "+ list_of_stuff[i].sex_code +"</h4>\
                                             <h4><b>Age:</b> "+ list_of_stuff[i].age +"</h4>\
@@ -299,6 +306,7 @@ function showView3(pet_id) {
         (pet_list) => {
             var pet_info = pet_list;
             console.log(JSON.stringify(pet_info));
+			console.log(pet_info.id)
              $('#petprofilename').append("<div>\
                 <h1>"+ pet_info.name +" 's Profile</h1>\
                  </div>\
@@ -317,6 +325,7 @@ function showView3(pet_id) {
                 <h4><b>Email:</b> "+ pet_info.email +"</h4>\
                 <h4><b>About "+ pet_info.name +" :</b> </h5>\
                 <h5>"+ pet_info.description +"</h5>\
+				<button onclick=\"Favorite("+pet_info.id+")\" class=\"btn btn-info\">Favorite This Pet</button>\
                 </div>\
                 </div>\
             </div>")
@@ -449,6 +458,7 @@ $("#view3toview2").click(function (){
       var search_location = $("#search_location").val();
       showView2(search_location);
 });
+
 
 // Anything with class 'title' will trigger a view change to VIEW_3 
 // when clicked on. The pet's name in VIEW2 will trigger it
