@@ -13,6 +13,12 @@ app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
 
 app.use(require('body-parser').urlencoded({extended: true}));
+app.use(require('body-parser').json());
+
+var morgan = require('morgan');
+
+app.use(morgan("combined"));
+
 
 var formidable = require('formidable');
 
@@ -199,6 +205,12 @@ app.get('/deletecookie', function(req, res){
 //   });
 
 // });
+
+var endpoints = require("./endpoints.js");
+
+app.post('/api/login', endpoints.login);
+app.post('/api/signup', endpoints.signup);
+
 
 app.use(function(req, res){
   res.type('text/html');
