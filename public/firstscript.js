@@ -251,7 +251,9 @@ function showView2(search_location){
 				$("#view3").hide();
                 $("#loading").hide();
                 $("#spotlightView").hide();
-                $("#profileView").hide();
+                $("#profileViewLogin").hide();
+				$("#profileViewSignup").hide();
+				$("#profileViewUser").hide();
 				$("#view2").show();
                 current_view = 2;
 				console.log(pet_list);
@@ -300,7 +302,9 @@ function showView3(pet_id) {
     $("#view2").hide();
     $("#view3").hide();
     $("#spotlightView").hide();
-    $("#profileView").hide();
+    $("#profileViewSignup").hide();
+	$("#profileViewLogin").hide();
+	$("#profileViewUser").hide();
     // test code
     getPetInfo(pet_id).then( 
         (pet_list) => {
@@ -344,10 +348,33 @@ function showView1() {
     $("#view2").hide();
     $("#view3").hide();
     $("#spotlightView").hide();
-    $("#profileView").hide();
+    $("#profileViewLogin").hide();
+	$("#profileViewSignup").hide();
+	$("#profileViewUser").hide();
     current_view = 1;
 }
-
+function showUserView() {
+    $("#loading").hide();
+    $("#view1").hide();
+    $("#view2").hide();
+    $("#view3").hide();
+    $("#spotlightView").hide();
+    $("#profileViewLogin").hide();
+	$("#profileViewSignup").hide();
+	$("#profileViewUser").show();
+    current_view = 1;
+}
+function showSignupView() {
+    $("#loading").hide();
+    $("#view1").hide();
+    $("#view2").hide();
+    $("#view3").hide();
+    $("#spotlightView").hide();
+    $("#profileViewLogin").hide();
+	$("#profileViewSignup").show();
+	$("#profileViewUser").hide();
+    current_view = 1;
+}
 
 var counter = 0;
     
@@ -422,7 +449,9 @@ $("#spotlight").click(function (){
     $("#view1").hide();
     $("#view2").hide();
     $("#view3").hide();
-    $("#profileView").hide();
+    $("#profileViewLogin").hide();
+	$("#profileViewSignup").hide();
+	$("#profileViewUser").hide();
     $("#spotlightView").show();
 });
 
@@ -433,7 +462,10 @@ $("#profile").click(function (){
     $("#view2").hide();
     $("#view3").hide();
     $("#spotlightView").hide();
-    $("#profileView").show();
+    $("#profileViewLogin").show();
+	$("#profileViewSignup").hide();
+	$("#profileViewUser").hide();
+	
 });
 
 $("#SearchButton").click(function (){

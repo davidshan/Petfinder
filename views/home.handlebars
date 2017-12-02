@@ -1,133 +1,189 @@
-        <div class="container">
-          <nav class="navbar navbar-default">
-          <div class="container-fluid">
-            <div class="navbar-header">
-              <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                <span class="sr-only"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-              </button>
-              <a class="pull-left" href="#"><img src="/img/logo-small.png"></a>
-            </div>
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-              <ul class="nav navbar-nav">
-                <li class="active"><a href="/">Search<span class="sr-only">(current)</span></a></li>
-                <li><a id="spotlight">Pet Spotlight</a></li>
-                <li><a id="profile">Your Profile</a></li>
-              </ul>
-            </div><!-- /.navbar-collapse -->
-          </div><!-- /.container-fluid -->
-        </nav>
+<div class="container">
+	<nav class="navbar navbar-default">
+	<div class="container-fluid">
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+				<span class="sr-only"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+            </button>
+            <a class="pull-left" href="#"><img src="/img/logo-small.png"></a>
         </div>
+		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+			<ul class="nav navbar-nav">
+				<li class="active"><a href="/">Search<span class="sr-only">(current)</span></a></li>
+				<li><a id="spotlight">Pet Spotlight</a></li>
+				<li><a id="profile">Your Profile</a></li>
+            </ul>
+        </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+    </nav>
+</div>
 
-        <div id="view1">
-            <div class="row">
-                <div class="jumbotron">
-                    <h1>PetFinder <span class="glyphicon glyphicon-globe"></span></h1>      
-                    <p>Find and adopt your new friend today!</p>
-                    <div class="row search-box-frame">
-                        <div class="col-md-8">
-                        <input type="text" class="form-control search-box" placeholder="Enter your location e.g florida" id="search_location">
-                        </div>
-                        <div class="col-md-4">
-                        <button type="submit" class="search-box-button" id="SearchButton">Search</button>
-                        </div>
-                    </div>
-                    <!-- <button onclick="showView2()">show view 2</button>
-                    <button id="florida">FL</button> -->
-                    <h2 id="No_Result"></h2>
-                    <p id="example_search"></p>
+<div id="view1">
+    <div class="row">
+        <div class="jumbotron">
+            <h1>PetFinder <span class="glyphicon glyphicon-globe"></span></h1>      
+            <p>Find and adopt your new friend today!</p>
+            <div class="row search-box-frame">
+                <div class="col-md-8">
+					<input type="text" class="form-control search-box" placeholder="Enter your location e.g florida" id="search_location">
                 </div>
-                <div class="center-text">
-                <img class="pet-logo" src="images/petsbest-logo.png">
-                </div>
+				<div class="col-md-4">
+				<button type="submit" class="search-box-button" id="SearchButton">Search</button>
+				</div>
+			</div>
+			<!-- <button onclick="showView2()">show view 2</button>
+			<button id="florida">FL</button> -->
+			<h2 id="No_Result"></h2>
+			<p id="example_search"></p>
+		</div>
+		<div class="center-text">
+			<img class="pet-logo" src="images/petsbest-logo.png">
+		</div>
                 
-            </div>
-        </div>
-        <div id="view2">
-            <div class="jumbotron purple-background">
-                <h1 class="">Adoptable Pets Near You!</h1>
-                <h2 id="Result"></h2>
-                <p><button id="view2toview1" class="btn btn-info">Back to Search</button></p>
-                <ul id="posts">
-                </ul>
-            </div>
-        </div>
+	</div>
+</div>
+<div id="view2">
+	<div class="jumbotron purple-background">
+		<h1 class="">Adoptable Pets Near You!</h1>
+		<h2 id="Result"></h2>
+		<p><button id="view2toview1" class="btn btn-info">Back to Search</button></p>
+		<ul id="posts">
+		</ul>
+	</div>
+</div>
           
 
-        <div id="view3">
-            <div class="light-blue-background">
-                <button id="view3toview2" class="btn btn-info">Back to Results</button>
-                <div id="petprofilename" class="center-text"></div>
-                <ul id="singlepetinfo"></ul>
-            </div>
-        </div>
+<div id="view3">
+    <div class="light-blue-background">
+        <button id="view3toview2" class="btn btn-info">Back to Results</button>
+        <div id="petprofilename" class="center-text"></div>
+        <ul id="singlepetinfo"></ul>
+    </div>
+</div>
 
-         <div id="loading">
+<div id="loading">
+    <div class="row">
+        <div class="col-lg-5 col-md-5 col-sm-5"></div>
+        <div class="col-lg-2 col-md-2 col-sm-3">
+            <img src="images/loading-wheel.gif">
+            <p>Loading...</p>
+        </div>
+        <div class="col-lg-5 col-md-5 col-sm-5"></div>
+    </div>
+</div>
+
+<div id="profileViewSignup">
+    <h1>My Profile</h1>
+    <div class="page-header">
+        <h3 class="center-text">Sign Up to save your favourite adoptable pets!</h3>
+    </div>
+    <div class="contactUs">
+        <form class="signup" role="form"
+        action="/process?form=signup" method="POST">
+
+        <input type="hidden" name="_csrf" value="{{csrf}}">
             <div class="row">
-                <div class="col-lg-5 col-md-5 col-sm-5"></div>
-                <div class="col-lg-2 col-md-2 col-sm-3">
-                    <img src="images/loading-wheel.gif">
-                    <p>Loading...</p>
-                </div>
-                <div class="col-lg-5 col-md-5 col-sm-5"></div>
-            </div>
-        </div>
-
-        <div id="profileView">
-            <h1>profile view</h1>
-            <div class="page-header">
-                <h3 class="center-text">Sign Up to save your favourite adoptable pets!</h3>
-            </div>
-            <div class="contactUs">
-                <form class="signup" role="form"
-                  action="/process?form=signup" method="POST">
-
-                <input type="hidden" name="_csrf" value="{{csrf}}">
-                    <div class="row">
-                        <div class="col-md-2"></div>
-                        <div class="form-group col-md-8" >
-                            <label for="fieldEmail" class="control-label">
-                            Email
-                            </label>
-                            <div>
-                                <input type="text" class="form-control" id="fieldEmail" name="email">
-                            </div>
-                             </div> <!-- End of form-group -->
-                        <div class="col-md-2"></div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-2"></div>
-                        <div class="form-group col-md-8">
-                            <label for="fieldQues" class="control-label">
-                            Password
-                            </label>
-                            <div>
-                                <input type="text" class="form-control" id="fieldQues"
-                            name="ques">
-                            </div>
-                        </div> <!-- End of form-group -->
-                        <div class="col-md-2"></div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-2"></div>
-                        <div class="form-group col-md-8">
+                <div class="col-md-2"></div>
+                    <div class="form-group col-md-8" >
+                        <label for="fieldEmail" class="control-label">
+                        Email
+                        </label>
                         <div>
-                            <button type="submit" class="btn btn-default">Sign Up</button>
+                            <input type="text" class="form-control" id="fieldEmail" name="email">
                         </div>
-                        </div> <!-- End of form-group -->
-                        <div class="col-md-2"></div>
-                  </div>
-                </form>
-            </div> 
+                    </div> <!-- End of form-group -->
+                    <div class="col-md-2"></div>
+                </div>
 
-        </div>
+                <div class="row">
+                <div class="col-md-2"></div>
+                <div class="form-group col-md-8">
+                    <label for="fieldQues" class="control-label">
+                    Password
+                    </label>
+                    <div>
+                        <input type="text" class="form-control" id="fieldQues"
+                        name="ques">
+                    </div>
+                </div> <!-- End of form-group -->
+                <div class="col-md-2"></div>
+            </div>
 
-        <div id="spotlightView">
-            <h1>spotlight view</h1>
-        </div>
+            <div class="row">
+                <div class="col-md-2"></div>
+                <div class="form-group col-md-8">
+					<div>
+                        <button onclick="showUserView()" class="btn btn-default">Sign Up</button>
+                    </div>
+                </div> <!-- End of form-group -->
+                <div class="col-md-2"></div>
+            </div>
+        </form>
+    </div> 
+
+</div>
+<div id="profileViewLogin">
+    <h1>My Profile</h1>
+    <div class="page-header">
+        <h3 class="center-text">Login to save your favourite adoptable pets!</h3>
+    </div>
+    <div class="contactUs">
+        <form class="login" role="form"
+        action="/process?form=login" method="POST">
+
+        <input type="hidden" name="_csrf" value="{{csrf}}">
+            <div class="row">
+                <div class="col-md-2"></div>
+                    <div class="form-group col-md-8" >
+                        <label for="fieldEmail" class="control-label">
+                        Email
+                        </label>
+                        <div>
+                            <input type="text" class="form-control" id="fieldEmail" name="email">
+                        </div>
+                    </div> <!-- End of form-group -->
+                    <div class="col-md-2"></div>
+                </div>
+
+                <div class="row">
+                <div class="col-md-2"></div>
+                <div class="form-group col-md-8">
+                    <label for="fieldQues" class="control-label">
+                    Password
+                    </label>
+                    <div>
+                        <input type="text" class="form-control" id="fieldQues"
+                        name="ques">
+                    </div>
+                </div> <!-- End of form-group -->
+                <div class="col-md-2"></div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-2"></div>
+                <div class="form-group col-md-8">
+					<div>
+                        <button onclick="showUserView()" class="btn btn-default">Login</button>
+                    </div>
+					<br>
+					<div>
+                        <button onclick="showSignupView()" class="btn btn-default">Sign up</button>
+                    </div>
+                </div> <!-- End of form-group -->
+                <div class="col-md-2"></div>
+            </div>
+        </form>
+    </div> 
+
+</div>
+<div id= "profileViewUser">
+	<h1>User View</h1>
+</div>
+<div id="spotlightView">
+    <h1>spotlight view</h1>
+</div>
 
 
