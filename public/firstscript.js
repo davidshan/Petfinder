@@ -243,6 +243,8 @@ function showView2(search_location){
 				$("#view1").hide();
 				$("#view3").hide();
                 $("#loading").hide();
+                $("#spotlightView").hide();
+                $("#profileView").hide();
 				$("#view2").show();
                 current_view = 2;
 				console.log(pet_list);
@@ -290,6 +292,8 @@ function showView3(pet_id) {
     $("#view1").hide();
     $("#view2").hide();
     $("#view3").hide();
+    $("#spotlightView").hide();
+    $("#profileView").hide();
     // test code
     getPetInfo(pet_id).then( 
         (pet_list) => {
@@ -330,8 +334,11 @@ function showView1() {
     $("#view1").show();
     $("#view2").hide();
     $("#view3").hide();
+    $("#spotlightView").hide();
+    $("#profileView").hide();
     current_view = 1;
 }
+
 
 var counter = 0;
     
@@ -399,6 +406,26 @@ $(document).ready(function() {
                 });
             });
     */
+
+$("#spotlight").click(function (){
+    console.log("spotlight view");
+    $("#loading").hide();
+    $("#view1").hide();
+    $("#view2").hide();
+    $("#view3").hide();
+    $("#profileView").hide();
+    $("#spotlightView").show();
+});
+
+$("#profile").click(function (){
+    console.log("profile view");
+    $("#loading").hide();
+    $("#view1").hide();
+    $("#view2").hide();
+    $("#view3").hide();
+    $("#spotlightView").hide();
+    $("#profileView").show();
+});
 
 $("#SearchButton").click(function (){
       var search_location = $("#search_location").val();
