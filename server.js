@@ -211,6 +211,10 @@ var endpoints = require("./endpoints.js");
 app.post('/api/login', endpoints.login);
 app.post('/api/signup', endpoints.signup);
 
+app.get('/api/:userId', endpoints.getUserPets);
+app.post('/api/:userId', endpoints.addPet);
+
+app.get('/api/:userId/:petId', endpoints.getSpecificPet);
 
 app.use(function(req, res){
   res.type('text/html');
