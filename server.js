@@ -112,7 +112,7 @@ app.post('/process', function(req,res){
     });
 
 
-  res.redirect(303, '/thankyou');
+  //res.redirect(303, '/thankyou');
 });
 
 app.get('/file-upload', function(req, res){
