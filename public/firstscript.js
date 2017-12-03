@@ -254,6 +254,13 @@ function showView2(search_location){
                 $("#profileView").hide();
                 $("#signupView").hide();
 				$("#view2").show();
+				var user = sessionStorage.getItem('user');
+				if(user){ //logged in
+					$("#logout").show();
+				}
+				else{
+					$("#logout").hide();
+				}
                 current_view = 2;
 				console.log(pet_list);
 			}
@@ -304,6 +311,13 @@ function showView3(pet_id) {
     $("#loginView").hide();
     $("#profileView").hide();
     $("#signupView").hide();
+	var user = sessionStorage.getItem('user');
+	if(user){ //logged in
+		$("#logout").show();
+	}
+	else{
+		$("#logout").hide();
+	}
     // test code
     getPetInfo(pet_id).then( 
         (pet_list) => {
@@ -350,6 +364,13 @@ function showView1() {
     $("#loginView").hide();
     $("#profileView").hide();
     $("#signupView").hide();
+	var user = sessionStorage.getItem('user');
+	if(user){ //logged in
+		$("#logout").show();
+	}
+	else{
+		$("#logout").hide();
+	}
     current_view = 1;
 }
 
@@ -362,6 +383,7 @@ function showProfileView() {
     $("#loginView").hide();
     $("#signupView").hide();
     $("#profileView").show();
+	$("#logout").show();
 }
 
 function showSignupView() {
@@ -373,6 +395,13 @@ function showSignupView() {
     $("#loginView").hide();
     $("#profileView").hide();
     $("#signupView").show();
+	var user = sessionStorage.getItem('user');
+	if(user){ //logged in
+		$("#logout").show();
+	}
+	else{
+		$("#logout").hide();
+	}
 }
 
 function showLoginView() {
@@ -384,6 +413,13 @@ function showLoginView() {
     $("#profileView").hide();
     $("#signupView").hide();
     $("#loginView").show();
+	var user = sessionStorage.getItem('user');
+	if(user){ //logged in
+		$("#logout").show();
+	}
+	else{
+		$("#logout").hide();
+	}
 }
 
 function signUp(user_email, user_password){
@@ -466,6 +502,13 @@ $(document).ready(function() {
         $("#spotlightView").hide();
         $("#signupView").hide();
         $("#loading").hide();
+		var user = sessionStorage.getItem('user');
+		if(user){ //logged in
+			$("#logout").show();
+		}
+		else{
+			$("#logout").hide();
+		}
     //}
 	var win = $(window);
 	var count = 1;
@@ -619,6 +662,14 @@ $("#spotlight").click(function (){
     $("#signupView").hide();
     $("#profileView").hide();
     $("#spotlightView").show();
+	var user = sessionStorage.getItem('user');
+    if(user){ //logged in
+        $("#logout").show();
+    }
+    else{
+        $("#logout").hide();
+    }
+	
 });
 
 $("#profile").click(function (){
