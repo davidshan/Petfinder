@@ -183,9 +183,9 @@ function reject(){
 
 // this is just a helper function to get rid of the duplicate code
 // for adding in 8 entries everytime we scroll / transition from view1 -> view2
-function append_new_entries(list_of_stuff) {
+function append_new_entries(list_of_stuff, add_to) {
     for(var i = 0; i < 8; i++){
-        $('#posts').append("<div class=\"row\">\
+        $(add_to).append("<div class=\"row\">\
                                 <div class=\"search-result-frame\">\
                                     <div class=\"search-result-content-frame hidden-xs\">\
                                           <div class= \"pet-pic-frame\">\
@@ -263,7 +263,7 @@ function showView2(search_location){
 			
 			////////////////////////////////////////////////////////////////////////////
 			
-            append_new_entries(newpet_list);
+            append_new_entries(newpet_list,'#posts');
             /*
 			for(var i = 0; i < 8; i++){
 				$('#posts').append("<div class=\"row\">\
@@ -362,7 +362,7 @@ function showUserView() {
     $("#profileViewLogin").hide();
 	$("#profileViewSignup").hide();
 	$("#profileViewUser").show();
-    current_view = 1;
+    current_view = 5;
 }
 function showSignupView() {
     $("#loading").hide();
@@ -373,7 +373,7 @@ function showSignupView() {
     $("#profileViewLogin").hide();
 	$("#profileViewSignup").show();
 	$("#profileViewUser").hide();
-    current_view = 1;
+    current_view = 4;
 }
 
 var counter = 0;
@@ -386,7 +386,6 @@ $(document).ready(function() {
 	win.scroll(function() {
         if (current_view == 2 && $(window).scrollTop() + $(window).height() > $(document).height() - 100) {
             // End of the document reached?
-            console.log("after");
             new_get_url = 'http://api.petfinder.com/pet.find?format=json&key=b31df3dfa380bae9b0039e3a91d9126f&location='.concat($("#search_location").val());
             if ($(document).height() - win.height() < (win.scrollTop()+10)) {
                 getPetList(new_get_url, count*8).then(
@@ -398,7 +397,7 @@ $(document).ready(function() {
                         newpet_list = pet_list;
                         console.log(pet_list);
                         ///////////////////////////////////////////////////////////////////////////
-                        append_new_entries(newpet_list);
+                        append_new_entries(newpet_list,'#posts');
                         /*
                         for(var i = 0; i < 8; i++){
 						$('#posts').append("<img class=\"img-responsive\" src = \" "+newpet_list[i].photo.split('?')[0]+"\" width=\"600\" >");
@@ -406,6 +405,28 @@ $(document).ready(function() {
                         */
 					
                         ////////////////////////////////////////////////////////////////////////////
+                        return pet_list;
+                    }
+                ).catch(string => {
+                    console.log("Error!", string);
+                });
+                count++;
+            }
+		
+        }
+		//scroll for user favriotes
+		if (current_view == 5 && $(window).scrollTop() + $(window).height() > $(document).height() - 100) {
+            // End of the document reached?
+            new_get_url = 'http://api.petfinder.com/pet.find?format=json&key=b31df3dfa380bae9b0039e3a91d9126f&location='.concat($("#search_location").val());
+            if ($(document).height() - win.height() < (win.scrollTop()+10)) {
+                getPetList(new_get_url, count*8).then(
+                    (pet_list) => {
+                        if (newpet_list[7].id == pet_list[0].id) {
+                            pet_list.splice(0, 1);
+                            }   
+                        newpet_list = pet_list;
+                        console.log(pet_list);
+                        append_new_entries(newpet_list,'#Favorited');
                         return pet_list;
                     }
                 ).catch(string => {
