@@ -35,6 +35,14 @@ app.get('/', function(req, res){
   res.render('home'); //references home handlebar
 });
 
+var session = require('express-session');
+
+app.use(session({
+  resave: false,
+  saveUninitialized: true,
+  secret: credentials.cookieSecret,
+}));
+
 // app.get('/junk', function(req, res, next){
   // console.log('Tried to access /junk');
   // throw new Error('/junk doesn\'t exist');
@@ -92,15 +100,9 @@ app.get('/', function(req, res){
   // res.send('username Cookie Deleted');
 // });
 
-// var session = require('express-session');
-
 // var parseurl = require('parseurl');
 
-// app.use(session({
-//   resave: false,
-//   saveUninitialized: true,
-//   secret: credentials.cookieSecret,
-// }));
+
 
 // app.use(function(req, res, next){
 //   var views = req.session.views;
