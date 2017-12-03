@@ -446,7 +446,7 @@ var counter = 0;
 $(document).ready(function() {
 
     var user = sessionStorage.getItem('user');
-    if(user){
+    /*if(user){
         //show profile page
         $("#view1").hide();
         $("#view2").hide();
@@ -457,7 +457,7 @@ $(document).ready(function() {
         $("#signupView").hide();
         $("#profileView").show();
     }
-    else{ //no user
+    else{*/ //no user
         //initial views for when page loads
         $("#view2").hide();
         $("#view3").hide();
@@ -466,7 +466,7 @@ $(document).ready(function() {
         $("#spotlightView").hide();
         $("#signupView").hide();
         $("#loading").hide();
-    }
+    //}
 	var win = $(window);
 	var count = 1;
 	
@@ -584,7 +584,7 @@ $("#go_signup").click(function (){
   
 $("#signup").click(function (){
     var user_email = $("#signup_email").val();
-    var user_password = $("#signup_password").val();
+    var user_password = $("#sign_password").val();
     signUp(user_email,user_password).then( 
         (item) => {
             var database_item = item;

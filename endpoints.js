@@ -6,7 +6,7 @@ expected:
 
 {
     email: string
-    ques: string
+    password: string
 }
 */
 
