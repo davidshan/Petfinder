@@ -158,13 +158,6 @@ var endpoints = require("./endpoints.js");
 app.post('/api/login', endpoints.login);
 app.post('/api/signup', endpoints.signup);
 
-app.get('/api/:userId', endpoints.getUserPets);
-app.post('/api/:userId', endpoints.addPet);
-
-app.get('/api/:userId/:petId', endpoints.getSpecificPet);
-app.put('/api/:userId/:petId', endpoints.editPet);
-app.delete('/api/:userId/:petId', endpoints.deletePet);
-
 /**
       START OF MESSAGING ENDPOINT SECTION
 */
@@ -213,8 +206,12 @@ app.delete('/api/messages/:messageId', endpoints.deleteMessage);
       END MESSAGING ENDPOINT SECTION
 */
 
+app.get('/api/favourites/:userId', endpoints.getUserPets);
+app.post('/api/favourites/:userId', endpoints.addPet);
 
-
+app.get('/api/favourites/:userId/:petId', endpoints.getSpecificPet);
+app.put('/api/favourites/:userId/:petId', endpoints.editPet);
+app.delete('/api/favourites/:userId/:petId', endpoints.deletePet);
 
 app.use(function(req, res){
   res.type('text/html');

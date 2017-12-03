@@ -15,7 +15,7 @@
         }) */
         
         request.post({
-            url: "http://localhost:3000/api/login",
+            url: "https://restpect.herokuapp.com/api/login",
             json: true, // don't forget,
             body: {
             email: "huang387",

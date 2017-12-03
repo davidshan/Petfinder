@@ -14,14 +14,14 @@
             }http://localhost:3000/api/login
         }) */
         
-        request.put({
-            url: "https://restpect.herokuapp.com/api/favourites/5a247a3938824b161fbe0f9b/396414612",
+        request.get({
+            url: "https://restpect.herokuapp.com/api/messages",
             json: true, // don't forget,
-            body: {
+            /*body: {
             comment: "poo"
       
             }
-        }, function (err,res, body) {
+        */}, function (err,res, body) {
 if(err) {
 console.log(err)
 } else {
