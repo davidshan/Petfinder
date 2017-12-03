@@ -14,7 +14,9 @@ exports.login = function (req, res) {
     var data = req.body;
     var emailIn = data['email'];
     var passIn = data['password'];
-    
+    console.log("emailIn");
+    console.log(emailIn);
+    console.log(passIn);
     MongoClient.connect(url, function(err,out){
         if(err) console.log(err)
             console.log("Database connected");
@@ -38,7 +40,6 @@ exports.login = function (req, res) {
                    res.json(item);
                }   
            });
-           
     });
     
 }

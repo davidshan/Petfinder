@@ -6,7 +6,6 @@ var newpet_list;
 var current_view=1;
 
 
-
 //Favorite a pet
 function Favorite(ID) {
 	console.log(ID)
@@ -251,6 +250,7 @@ function showView2(search_location){
 				$("#view3").hide();
                 $("#loading").hide();
                 $("#spotlightView").hide();
+                $("#loginView").hide();
                 $("#profileView").hide();
 				$("#view2").show();
                 current_view = 2;
@@ -300,6 +300,7 @@ function showView3(pet_id) {
     $("#view2").hide();
     $("#view3").hide();
     $("#spotlightView").hide();
+    $("#loginView").hide();
     $("#profileView").hide();
     // test code
     getPetInfo(pet_id).then( 
@@ -344,14 +345,125 @@ function showView1() {
     $("#view2").hide();
     $("#view3").hide();
     $("#spotlightView").hide();
+    $("#loginView").hide();
     $("#profileView").hide();
     current_view = 1;
+}
+
+function showProfileView() {
+   $("#loading").hide();
+    $("#view1").hide();
+    $("#view2").hide();
+    $("#view3").hide();
+    $("#spotlightView").hide();
+    $("#loginView").hide();
+    $("#signupView").hide();
+    $("#profileView").show();
+}
+
+function showSignupView() {
+    $("#loading").hide();
+    $("#view1").hide();
+    $("#view2").hide();
+    $("#view3").hide();
+    $("#spotlightView").hide();
+    $("#loginView").hide();
+    $("#profileView").hide();
+    $("#signupView").show();
+}
+
+function showLoginView() {
+    $("#loading").hide();
+    $("#view1").hide();
+    $("#view2").hide();
+    $("#view3").hide();
+    $("#spotlightView").hide();
+    $("#profileView").hide();
+    $("#signupView").hide();
+    $("#loginView").show();
+}
+
+function signUp(user_email, user_password){
+
+    return new Promise((resolve, reject) => {
+       $.ajax({
+            type:'POST',
+            data: JSON.stringify({
+                    email: user_email,
+                    password: user_password,
+                    }),
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            url: "/api/signup/" ,
+            dataType: 'json',
+            success:function(data) {
+                resolve(data);
+            },
+            fail:function() {
+                reject("FAILED AJAX");
+            }
+        });
+    });                 
+}
+
+function loginUser(user_email, user_password){
+
+    /*
+    req.params = {
+        userId: _id from database
+        petId: petfinder id
+    }
+    */
+    return new Promise((resolve, reject) => {
+       $.ajax({
+            type: 'POST',
+            data: JSON.stringify({
+                "email": user_email,
+                "password": user_password,
+            }),
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            url: "/api/login/" ,
+            dataType: 'json',
+            success:function(data) {
+                resolve(data);
+            },
+            fail:function() {
+                reject("FAILED AJAX");
+            }
+        });
+    });                 
 }
 
 
 var counter = 0;
     
 $(document).ready(function() {
+
+    var user = sessionStorage.getItem('user');
+    if(user){
+        //show profile page
+        $("#view1").hide();
+        $("#view2").hide();
+        $("#view3").hide();
+        $("#spotlightView").hide();
+        $("#loading").hide();
+        $("#loginView").hide();
+        $("#signupView").hide();
+        $("#profileView").show();
+    }
+    else{ //no user
+        //initial views for when page loads
+        $("#view2").hide();
+        $("#view3").hide();
+        $("#profileView").hide();
+        $("#loginView").hide();
+        $("#spotlightView").hide();
+        $("#signupView").hide();
+        $("#loading").hide();
+    }
 	var win = $(window);
 	var count = 1;
 	
@@ -415,6 +527,63 @@ $(document).ready(function() {
                 });
             });
     */
+$("#login").click(function (){
+    var user_email = $("#login_email").val();
+    var user_password = $("#login_password").val();
+    loginUser(user_email,user_password)
+        .then(
+            (item) => {
+                var database_item = item;
+                console.log("returned userid!")
+                console.log(JSON.stringify(database_item));
+                showProfileView();
+
+                //setting session storage
+                sessionStorage.setItem('user', database_item);
+                sessionStorage.setItem('user_email', user_email);
+                console.log("user set in session storage: ");
+                console.log( sessionStorage.getItem('user'));
+                document.getElementById("welcome_greeting").innerHTML = "welcome " + user_email;
+                
+        })
+        .catch(string => {
+            console.log("Error!", string);
+            console.log("user is not signed up yet")
+            showSignupView();
+    });
+});
+
+$("#go_signup").click(function (){
+    showSignupView();
+});
+
+  
+$("#signup").click(function (){
+    var user_email = $("#signup_email").val();
+    var user_password = $("#signup_password").val();
+    signUp(user_email,user_password).then( 
+        (item) => {
+            var database_item = item;
+            console.log("finished signing up")
+            console.log(JSON.stringify(database_item));
+
+            //saving user to session storage
+            sessionStorage.setItem('user', database_item);
+            sessionStorage.setItem('user_email', user_email);
+            document.getElementById("welcome_greeting").innerHTML = "welcome " + user_email;
+            showProfileView();
+        })
+    .catch(string => {
+        console.log("Error!", string);
+        console.log("user did not sign up successfully")
+    });
+
+});
+
+$("#logout").click(function (){
+    sessionStorage.clear(); //remove user from session storage
+    showLoginView();
+});
 
 $("#spotlight").click(function (){
     console.log("spotlight view");
@@ -422,18 +591,20 @@ $("#spotlight").click(function (){
     $("#view1").hide();
     $("#view2").hide();
     $("#view3").hide();
+    $("#loginView").hide();
+    $("#signupView").hide();
     $("#profileView").hide();
     $("#spotlightView").show();
 });
 
 $("#profile").click(function (){
-    console.log("profile view");
-    $("#loading").hide();
-    $("#view1").hide();
-    $("#view2").hide();
-    $("#view3").hide();
-    $("#spotlightView").hide();
-    $("#profileView").show();
+    var user = sessionStorage.getItem('user');
+    if(user){ //logged in
+        showProfileView();
+    }
+    else{
+        showLoginView();
+    }
 });
 
 $("#SearchButton").click(function (){
