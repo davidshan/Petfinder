@@ -158,6 +158,8 @@ app.get('/api/:userId', endpoints.getUserPets);
 app.post('/api/:userId', endpoints.addPet);
 
 app.get('/api/:userId/:petId', endpoints.getSpecificPet);
+app.put('/api/:userId/:petId', endpoints.editPet);
+app.delete('/api/:userId/:petId', endpoints.deletePet);
 
 app.use(function(req, res){
   res.type('text/html');

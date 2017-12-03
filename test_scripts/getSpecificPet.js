@@ -14,16 +14,14 @@
             }http://localhost:3000/api/login
         }) */
         
-        request.post({
-            url: "http://localhost:3000/api/5a22ddf338824b161f91614c/",
+        request.get({
+            url: "http://localhost:3000/api/5a23ace538824b161fa91dbc/396414612",
             json: true, // don't forget,
-            body: {
-            petId: "396414612",
-            img: "fake",
-            name: "boo technically",
-            description: "a desc"
+            /*body: {
+            comment: "poo"
+      
             }
-        }, function (err,res, body) {
+        */}, function (err,res, body) {
 if(err) {
 console.log(err)
 } else {
