@@ -155,6 +155,10 @@ app.use(session({
 
 var endpoints = require("./endpoints.js");
 
+app.get('/api/messages', endpoints.getMessages);
+app.delete('/api/messages/:messageId', endpoints.deleteMessage);
+app.post('/api/messages', endpoints.addMessage);
+
 app.post('/api/login', endpoints.login);
 app.post('/api/signup', endpoints.signup);
 
@@ -168,7 +172,7 @@ app.post('/api/signup', endpoints.signup);
 
 // Example CURL call (works for this one):
 // curl -H "Content-Type: application/json" --request POST --data '{"message": "bam"} http://localhost:3000/api/messages 
-app.post('/api/messages', endpoints.addMessage);
+//app.post('/api/messages', endpoints.addMessage);
 
 /**
 // Using our own defined IDs to POST:
@@ -194,9 +198,9 @@ app.post('/api/messages/:messageId', function (req, res) {
 
 // Using command: curl --request GET http://localhost:3000/api/messages
 // Gets a list of all messages, and their associated IDs
-app.get('/api/messages', endpoints.getMessages);
+//app.get('/api/messages', endpoints.getMessages);
 
-app.delete('/api/messages/:messageId', endpoints.deleteMessage);
+//app.delete('/api/messages/:messageId', endpoints.deleteMessage);
 
 
 // Need specific endpoint of 1234 (/api/messages/1234) ?
