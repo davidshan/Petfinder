@@ -18,7 +18,7 @@
             url: "http://localhost:3000/api/messages/",
             json: true, // don't forget,
             /*body: {
-            comment: "poo"
+            data: "poo"
       
             }
         */}, function (err,res, body) {

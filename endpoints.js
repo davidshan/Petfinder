@@ -377,7 +377,7 @@ exports.addMessage = function (req, res) {
     console.log("Database connected");
     db = out;
 
-    console.log("Message: " + req.body.message);
+    console.log("Message: " + req.body.data);
     var key;
     if (req.body.id == null) {
       key = ObjectId().valueOf().toString();
@@ -388,15 +388,16 @@ exports.addMessage = function (req, res) {
     }
 
     //console.log(typeof key == 'string');
-    var data = {_id: key, message: req.body.message};
+    var data = {_id: key, data: req.body.data};
     
-    db.collection("restpect-messages").insertOne(data, function(err, res){
+    db.collection("restpect-messages").insertOne(data, function(err, out){
       if (err) {
         console.log(err);
       }
       else {
         db.close();
         console.log("Message saved");
+        res.json({messageId: key});
       }
     });
   });
@@ -408,13 +409,14 @@ exports.getMessages = function (req, res) {
     console.log("Database connected");
     db = out;
 
-    db.collection("restpect-messages").find( {} ).toArray(function(err, docs) {
+    db.collection("restpect-messages").find( {} ).sort({_id: -1}).toArray(function(err, docs) {
       if (err) {
         console.log("Error");
       }
       else {
         db.close();
-        console.log(docs);
+        //console.log(docs);
+        res.json({messages: docs});
         // Todo: send to users logged in on website
       }
     });
@@ -433,9 +435,11 @@ exports.deleteMessage = function (req, res) {
     try {
       db.collection("restpect-messages").deleteOne( {"_id": req.params.messageId} )
       console.log("Message either doesn't exist or successfully deleted");
+      res.json({status: "ok"});
     }
     catch (e) {
       console.log(e);
+      res.status(400).json({error: e});
     }
     db.close();
   });

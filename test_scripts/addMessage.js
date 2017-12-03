@@ -15,10 +15,10 @@
         }) */
         
         request.post({
-            url: "http://localhost:3000/api/favourites/5a247a3938824b161fbe0f9b/",
+            url: "http://localhost:3000/api/messages/",
             json: true, // don't forget,
             body: {
-            petId: "396414612"
+            data: "poo"
       
             }
         }, function (err,res, body) {

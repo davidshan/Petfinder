@@ -5,6 +5,7 @@
         // implement this
     }
 
+    var id = "";
  /* request.post({
             url: 'http://wolf.teach.cs.toronto.edu:3090/secret-message/huang387',
             json: true, // don't forget,
@@ -14,14 +15,14 @@
             }http://localhost:3000/api/login
         }) */
         
-        request.post({
-            url: "http://localhost:3000/api/favourites/5a247a3938824b161fbe0f9b/",
+        request.delete({
+            url: "http://localhost:3000/api/messages/".concat(id),
             json: true, // don't forget,
-            body: {
-            petId: "396414612"
+            /*body: {
+            data: "poo"
       
             }
-        }, function (err,res, body) {
+        */}, function (err,res, body) {
 if(err) {
 console.log(err)
 } else {
