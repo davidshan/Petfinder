@@ -367,3 +367,77 @@ exports.deletePet = function (req, res) {
         });
     });
 }
+
+
+//messages
+
+exports.addMessage = function (req, res) { 
+  MongoClient.connect(url, function(err, out){
+    if(err) console.log(err);
+    console.log("Database connected");
+    db = out;
+
+    console.log("Message: " + req.body.message);
+    var key;
+    if (req.body.id == null) {
+      key = ObjectId().valueOf().toString();
+      console.log("No ID provided, string generated: " + key);
+    }
+    else {
+      key = req.body.id.toString();
+    }
+
+    //console.log(typeof key == 'string');
+    var data = {_id: key, message: req.body.message};
+    
+    db.collection("restpect-messages").insertOne(data, function(err, res){
+      if (err) {
+        console.log(err);
+      }
+      else {
+        db.close();
+        console.log("Message saved");
+      }
+    });
+  });
+}
+
+exports.getMessages = function (req, res) { 
+  MongoClient.connect(url, function(err, out){
+    if(err) console.log(err);
+    console.log("Database connected");
+    db = out;
+
+    db.collection("restpect-messages").find( {} ).toArray(function(err, docs) {
+      if (err) {
+        console.log("Error");
+      }
+      else {
+        db.close();
+        console.log(docs);
+        // Todo: send to users logged in on website
+      }
+    });
+
+  });
+}
+
+exports.deleteMessage = function (req, res) {
+  console.log(req.params.messageId);
+
+  MongoClient.connect(url, function(err, out){
+    if(err) console.log(err);
+    console.log("Database connected");
+    db = out;
+
+    try {
+      db.collection("restpect-messages").deleteOne( {"_id": req.params.messageId} )
+      console.log("Message either doesn't exist or successfully deleted");
+    }
+    catch (e) {
+      console.log(e);
+    }
+    db.close();
+  });
+}
+

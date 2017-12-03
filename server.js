@@ -161,6 +161,57 @@ app.get('/api/:userId/:petId', endpoints.getSpecificPet);
 app.put('/api/:userId/:petId', endpoints.editPet);
 app.delete('/api/:userId/:petId', endpoints.deletePet);
 
+/**
+      START OF MESSAGING ENDPOINT SECTION
+*/
+
+// Format of data to be sent:
+// {"id"(optional): "1234", "message": "dinosaurus rex"}
+// -value of id doesn't have to be a string
+
+// Example CURL call (works for this one):
+// curl -H "Content-Type: application/json" --request POST --data '{"message": "bam"} http://localhost:3000/api/messages 
+app.post('/api/messages', endpoints.addMessage);
+
+/**
+// Using our own defined IDs to POST:
+app.post('/api/messages/:messageId', function (req, res) { 
+  MongoClient.connect(url, function(err, res){
+    if(err) console.log(err)
+    console.log("Database connected");
+    db = res
+
+    var data = {_id: req.params.messageId, message: req.body.message};
+    db.collection("restpect-messages").insert(data, function(err, res){
+      if (err) {
+        console.log("Error");
+      }
+      else {
+        db.close();
+        console.log("Message saved");
+      }
+    });
+  });
+});
+*/
+
+// Using command: curl --request GET http://localhost:3000/api/messages
+// Gets a list of all messages, and their associated IDs
+app.get('/api/messages', endpoints.getMessages);
+
+app.delete('/api/messages/:messageId', endpoints.deleteMessage);
+
+
+// Need specific endpoint of 1234 (/api/messages/1234) ?
+// (according to assignment specs)
+
+/**     
+      END MESSAGING ENDPOINT SECTION
+*/
+
+
+
+
 app.use(function(req, res){
   res.type('text/html');
   res.status(404);
