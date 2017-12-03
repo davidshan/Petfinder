@@ -58,41 +58,6 @@ app.get('/thankyou', function(req, res){
   res.render('thankyou');
 });
 
-app.post('/process', function(req,res){
-  console.log('Form : ' + req.query.form);
-  console.log('CSRF token : ' + req.body._csrf);
-  console.log('Email : ' + req.body.email);
-  console.log('Password : ' + req.body.password);
-  
-
-  //console.log(db.collection("suke1purchases_COLLECTION").find({name: true, address: true}));
-  //.log(db.collection("suke1purchases_COLLECTION").find({}, {_id: false, name: true, address: true, ph_num: false, amount: false}) );
-  //console.log(db.collection("suke1purchases_COLLECTION").find({}, {_id:false, name: true, address: true}) );
-  // request.post({
-  //           url: "http://localhost:3000/api/signup/",
-  //           json: true, // don't forget,
-  //           body: {
-  //               email: req.body.email,
-  //               password: req.body.password,
-  //           }
-  //       }, function (err,res,body) {
-  //       if(err) {
-  //       console.log(err)
-  //       } else {
-  //       data = body
-  //       //Modify this to access different JSON fields
-  //       console.log("from database:")
-  //       console.log(data) 
-  //       //sessionStorage.setItem('user', req.body.email);
-  //       inserted = true;
-  //       }
-  //   });
-
-  //   //redirect page from signup
-  //   res.redirect(303, '/' + req.body.email);
-  
-});
-
 app.get('/file-upload', function(req, res){
   var now = new Date();
   res.render('file-upload',{
@@ -189,6 +154,10 @@ var endpoints = require("./endpoints.js");
 app.post('/api/login', endpoints.login);
 app.post('/api/signup', endpoints.signup);
 
+app.get('/api/:userId', endpoints.getUserPets);
+app.post('/api/:userId', endpoints.addPet);
+
+app.get('/api/:userId/:petId', endpoints.getSpecificPet);
 
 app.use(function(req, res){
   res.type('text/html');

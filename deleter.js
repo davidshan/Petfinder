@@ -11,5 +11,9 @@
 				
                 db.collection("restpect-users").remove({});
                 console.log("respect-users cleared");
+                db.collection("restpect-pets").remove({});
+                console.log("respect-pets cleared");
+                db.collection("restpect-messages").remove({});
+                console.log("respect-messages cleared");
                 db.close();
     });

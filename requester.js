@@ -15,11 +15,13 @@
         }) */
         
         request.post({
-            url: "http://localhost:3000/api/signup",
+            url: "http://localhost:3000/api/5a22ddf338824b161f91614c/",
             json: true, // don't forget,
             body: {
-                'email': 'huang387',
-                'password': '123'
+            petId: "396414612",
+            img: "fake",
+            name: "boo technically",
+            description: "a desc"
             }
         }, function (err,res, body) {
 if(err) {
