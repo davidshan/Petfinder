@@ -22,7 +22,7 @@ function getPetInfo(id) {
                 'Access-Control-Allow-Methods': 'POST, GET, OPTIONS',
                 'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept'
             },
-            url: "http://api.petfinder.com/pet.get?format=json&key=b31df3dfa380bae9b0039e3a91d9126f&id=".concat(id).concat('&callback=?'),
+            url: "https://api.petfinder.com/pet.get?format=json&key=b31df3dfa380bae9b0039e3a91d9126f&id=".concat(id).concat('&callback=?'),
             dataType: 'json',
             success:function(data) {
 
@@ -226,7 +226,7 @@ function append_new_entries(list_of_stuff, add_to) {
 
 function showView2(search_location){
 
-    new_get_url = 'http://api.petfinder.com/pet.find?format=json&key=b31df3dfa380bae9b0039e3a91d9126f&location='.concat(search_location);
+    new_get_url = 'https://api.petfinder.com/pet.find?format=json&key=b31df3dfa380bae9b0039e3a91d9126f&location='.concat(search_location);
     getPetList(new_get_url, 0).then(
         (pet_list) => {
 			if(pet_list.length == 0){
@@ -517,7 +517,7 @@ $(document).ready(function() {
 	win.scroll(function() {
         if (current_view == 2 && $(window).scrollTop() + $(window).height() > $(document).height() - 100) {
             // End of the document reached?
-            new_get_url = 'http://api.petfinder.com/pet.find?format=json&key=b31df3dfa380bae9b0039e3a91d9126f&location='.concat($("#search_location").val());
+            new_get_url = 'https://api.petfinder.com/pet.find?format=json&key=b31df3dfa380bae9b0039e3a91d9126f&location='.concat($("#search_location").val());
             if ($(document).height() - win.height() < (win.scrollTop()+10)) {
                 getPetList(new_get_url, count*8).then(
                     (pet_list) => {
@@ -548,7 +548,7 @@ $(document).ready(function() {
 		//scroll for user favriotes
 		if (current_view == 5 && $(window).scrollTop() + $(window).height() > $(document).height() - 100) {
             // End of the document reached?
-            new_get_url = 'http://api.petfinder.com/pet.find?format=json&key=b31df3dfa380bae9b0039e3a91d9126f&location='.concat($("#search_location").val());
+            new_get_url = 'https://api.petfinder.com/pet.find?format=json&key=b31df3dfa380bae9b0039e3a91d9126f&location='.concat($("#search_location").val());
             if ($(document).height() - win.height() < (win.scrollTop()+10)) {
                 getPetList(new_get_url, count*8).then(
                     (pet_list) => {
@@ -578,7 +578,7 @@ $(document).ready(function() {
           'Access-Control-Allow-Methods': 'POST, GET, OPTIONS',
           'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept'
         },
-                    url: 'http://api.petfinder.com/pet.get?format=json&key=b31df3dfa380bae9b0039e3a91d9126f&id=39041553&callback=?',
+                    url: 'https://api.petfinder.com/pet.get?format=json&key=b31df3dfa380bae9b0039e3a91d9126f&id=39041553&callback=?',
                     dataType: 'json',
                     success:function(data){
                     console.log("data is:" + JSON.stringify(data));
