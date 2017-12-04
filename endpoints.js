@@ -388,7 +388,7 @@ exports.addMessage = function (req, res) {
     }
 
     //console.log(typeof key == 'string');
-    var data = {_id: key, data: req.body.data};
+    var data = {_id: key, data: req.body.data, timestamp: ObjectId()};
     
     db.collection("restpect-messages").insertOne(data, function(err, out){
       if (err) {
@@ -409,7 +409,7 @@ exports.getMessages = function (req, res) {
     console.log("Database connected");
     db = out;
 
-    db.collection("restpect-messages").find( {} ).sort({_id: -1}).toArray(function(err, docs) {
+    db.collection("restpect-messages").find( {} ).sort({timestamp: -1}).toArray(function(err, docs) {
       if (err) {
         console.log("Error");
       }
