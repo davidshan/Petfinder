@@ -914,7 +914,7 @@ $("#login").click(function (){
                 var database_item = item;
                 console.log("returned userid!")
                 console.log(JSON.stringify(database_item));
-                showProfileView();
+                
 
                 //setting session storage
                 sessionStorage.setItem('userId', database_item.userId);
@@ -922,6 +922,7 @@ $("#login").click(function (){
                 console.log( sessionStorage.getItem('userId'));
                 document.getElementById("welcome_greeting").innerHTML = "welcome " + user_email;
                 
+                showProfileView();
         })
         .catch(string => {
             console.log("Error!", string);
