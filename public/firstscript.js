@@ -476,11 +476,42 @@ function loginUser(user_email, user_password){
     });                 
 }
 
+function getAllMessages() {
+    $.ajax({
+        type: 'GET',
+        url: 'api/messages',
+        headers: {'Content-Type': 'application/json'},
+        success: function(data) {
+            console.log("data:" + JSON.stringify(data));
+        }
+    });
+    setTimeout(getAllMessages, 5000);
+}
 
+function getLatestMessage() {
+    $.ajax({
+        type: 'GET',
+        url: 'api/messages',
+        headers: {'Content-Type': 'application/json'},
+        success: function(data) {
+            var message;
+            if ( (data['messages'].length == 0) || (data['messages'][0]['data'] == null) ) {
+                message = "No New Messages";
+            }
+            else {
+                message = data['messages'][0]['data'];
+            }
+
+            $(".alertText").html(message);
+        }
+    });
+    setTimeout(getLatestMessage, 5000);
+}
 var counter = 0;
     
 $(document).ready(function() {
 
+    setTimeout(getLatestMessage, 5000);
     var user = sessionStorage.getItem('user');
     /*if(user){
         //show profile page

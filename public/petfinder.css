@@ -212,3 +212,13 @@ a:hover{
 .small-font{
     font-size: 15px !important;
 }
+
+.alert{
+    padding: 20px;
+    background-color: #2196F3;
+    color: white;
+    margin-bottom: 15px;
+    opacity: 1;
+    transition: opacity 0.6s;
+    margin-bottom: 15px;
+}
