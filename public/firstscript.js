@@ -461,6 +461,8 @@ function showFavView3(pet_id) {
     $("#loginView").hide();
     $("#profileView").hide();
     $("#signupView").hide();
+    $('#petprofilename').html('');
+    $('#singlepetinfo').html('');
     $("#back_to_results_button").hide();
 
     var user = sessionStorage.getItem('user');
