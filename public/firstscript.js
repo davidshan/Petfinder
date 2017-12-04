@@ -15,6 +15,7 @@ function Favorite(ID) {
             (item) => {
                 var database_item = item;
                 console.log("added a pet!")
+				console.log(item)
                 console.log(JSON.stringify(database_item));
 
                 //setting session storage
@@ -288,7 +289,7 @@ function append_new_fav_entries(list_of_stuff, add_to) {
                                         <div class=\"search-result-pet-info hidden-xs\">\
                                             <br />\
                                             <a class='title' id="+ list_of_stuff[i].id +">Hi I'm "+ list_of_stuff[i].name +"!</a>\
-                                            <button onclick=\"Favorite("+list_of_stuff[i].id+")\" class=\"btn btn-info\">Favorite This Pet</button>\
+                                            <button onclick=\"Delete("+list_of_stuff[i].id+")\" class=\"btn btn-info\">Unfavorite This Pet</button>\
                                             <h4><b>Size:</b> "+ list_of_stuff[i].size +"</h4>\
                                             <h4><b>Sex:</b> "+ list_of_stuff[i].sex_code +"</h4>\
                                             <h4><b>Age:</b> "+ list_of_stuff[i].age +"</h4>\
@@ -536,6 +537,8 @@ function showProfileView() {
     $("#profileView").show();
 	$("#logout").show();
     $(".alert").show();
+	current_view = 7;
+	$("#favs").html('');
     getFavs();
 
 }
@@ -645,6 +648,7 @@ function getAllMessages() {
 }
 
 function deletePet(user_id, pet_id){
+	console.log("deletee")
     return new Promise((resolve, reject) => {
        $.ajax({
             type:'DELETE',
@@ -655,9 +659,10 @@ function deletePet(user_id, pet_id){
             headers: {
                 'Content-Type': 'application/json',
             },
-            url: "/api/"+user_id+"/"+pet_id,
+            url: "/api/"+user_id+"/:"+pet_id,
             dataType: 'json',
             success:function(data) {
+				console.log(data)
                 resolve(data);
             },
             fail:function() {
