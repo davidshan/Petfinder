@@ -57,6 +57,7 @@ function Delete(ID) {
                 console.log("Error!", string);
                 console.log("Did not delete pet :(")
             });
+			showProfileView();
         }
         else{
             //shouldn't be here lol
@@ -612,6 +613,7 @@ function loginUser(user_email, user_password){
         petId: petfinder id
     }
     */
+	console.log("bad")
     return new Promise((resolve, reject) => {
        $.ajax({
             type: 'POST',
@@ -628,6 +630,7 @@ function loginUser(user_email, user_password){
                 resolve(data);
             },
             fail:function() {
+				console.log("asdf")
                 reject("FAILED AJAX");
             }
         });
