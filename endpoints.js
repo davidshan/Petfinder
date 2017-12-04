@@ -324,7 +324,7 @@ exports.deletePet = function (req, res) {
     */
     var userIdIn = req.params.userId;
     
-    var petIdIn = req.params.petId;
+    var petIdIn = parseInt(req.params.petId.substr(1));
     
     MongoClient.connect(url, function(err,out){
         if(err) console.log(err)
@@ -342,14 +342,15 @@ exports.deletePet = function (req, res) {
                    res.status(400).json({error: 'user does not exist'});
                }        
                else {
-                        db.collection("restpect-pets").remove({email: userIdIn, petId: petIdIn}, {w:1}, function(err, numberOfRemovedDocs) {
-                            if (err) {
-                                console.log(err);
-                            }
-                            db.close();
-                            res.json({deleted: numberOfRemovedDocs});
-
-                        });   
+                        try {
+							  db.collection("restpect-pets").deleteOne( {email: userIdIn, petId: petIdIn} )
+							  console.log("Message either doesn't exist or successfully deleted");
+							  res.json({status: "ok"});
+						}
+						catch (e) {
+							 console.log(e);
+							 res.status(400).json({error: e});
+						} 
                    }
         });
     });
