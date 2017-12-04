@@ -8,9 +8,9 @@ var current_view=1;
 
 //Favorite a pet
 function Favorite(ID) {
-    var user = sessionStorage.getItem('user_email');
-        if(user){ //logged in      
-            addPet(user, ID)
+    var userId = sessionStorage.getItem('userId');
+        if(userId){ //logged in      
+            addPet(userId, ID)
             .then(
             (item) => {
                 var database_item = item;
@@ -20,10 +20,10 @@ function Favorite(ID) {
 
                 //setting session storage
                 // sessionStorage.setItem('user', database_item);
-                // sessionStorage.setItem('user_email', user_email);
+                // sessionStorage.setItem('userId', userId);
                 // console.log("user set in session storage: ");
-                // console.log( sessionStorage.getItem('user'));
-                // document.getElementById("welcome_greeting").innerHTML = "welcome " + user_email;        
+                // console.log( sessionStorage.getItem('userId'));
+                // document.getElementById("welcome_greeting").innerHTML = "welcome " + userId;        
             })
             .catch(string => {
                 console.log("Error!", string);
@@ -37,9 +37,9 @@ function Favorite(ID) {
 
 //Delete a pet
 function Delete(ID) {
-    var user = sessionStorage.getItem('user_email');
-        if(user){ //logged in      
-            deletePet(user, ID)
+    var userId = sessionStorage.getItem('userId');
+        if(userId){ //logged in      
+            deletePet(userId, ID)
             .then(
             (item) => {
                 var database_item = item;
@@ -48,10 +48,10 @@ function Delete(ID) {
 
                 //setting session storage
                 // sessionStorage.setItem('user', database_item);
-                // sessionStorage.setItem('user_email', user_email);
+                // sessionStorage.setItem('userId', userId);
                 // console.log("user set in session storage: ");
-                // console.log( sessionStorage.getItem('user'));
-                // document.getElementById("welcome_greeting").innerHTML = "welcome " + user_email;        
+                // console.log( sessionStorage.getItem('userId'));
+                // document.getElementById("welcome_greeting").innerHTML = "welcome " + userId;        
             })
             .catch(string => {
                 console.log("Error!", string);
@@ -350,8 +350,8 @@ function showView2(search_location){
                 $("#profileView").hide();
                 $("#signupView").hide();
 				$("#view2").show();
-				var user = sessionStorage.getItem('user');
-				if(user){ //logged in
+				var userId = sessionStorage.getItem('userId');
+				if(userId){ //logged in
 					$("#logout").show();
 				}
 				else{
@@ -407,8 +407,8 @@ function showView3(pet_id) {
     $("#loginView").hide();
     $("#profileView").hide();
     $("#signupView").hide();
-	var user = sessionStorage.getItem('user');
-	if(user){ //logged in
+	var userId = sessionStorage.getItem('userId');
+	if(userId){ //logged in
 		$("#logout").show();
 	}
 	else{
@@ -463,8 +463,8 @@ function showFavView3(pet_id) {
     $("#signupView").hide();
     $("#back_to_results_button").hide();
 
-    var user = sessionStorage.getItem('user');
-    if(user){ //logged in
+    var userId = sessionStorage.getItem('userId');
+    if(userId){ //logged in
         $("#logout").show();
     }
     else{
@@ -516,8 +516,8 @@ function showView1() {
     $("#loginView").hide();
     $("#profileView").hide();
     $("#signupView").hide();
-	var user = sessionStorage.getItem('user');
-	if(user){ //logged in
+	var userId = sessionStorage.getItem('userId');
+	if(userId){ //logged in
 		$("#logout").show();
 	}
 	else{
@@ -552,8 +552,8 @@ function showSignupView() {
     $("#loginView").hide();
     $("#profileView").hide();
     $("#signupView").show();
-	var user = sessionStorage.getItem('user');
-	if(user){ //logged in
+	var userId = sessionStorage.getItem('userId');
+	if(userId){ //logged in
 		$("#logout").show();
 	}
 	else{
@@ -571,8 +571,8 @@ function showLoginView() {
     $("#profileView").hide();
     $("#signupView").hide();
     $("#loginView").show();
-	var user = sessionStorage.getItem('user');
-	if(user){ //logged in
+	var userId = sessionStorage.getItem('userId');
+	if(userId){ //logged in
 		$("#logout").show();
 	}
 	else{
@@ -580,13 +580,13 @@ function showLoginView() {
 	}
 }
 
-function signUp(user_email, user_password){
+function signUp(emailIn, user_password){
 
     return new Promise((resolve, reject) => {
        $.ajax({
             type:'POST',
             data: JSON.stringify({
-                    email: user_email,
+                    email: emailIn,
                     password: user_password,
                     }),
             headers: {
@@ -604,21 +604,18 @@ function signUp(user_email, user_password){
     });                 
 }
 
-function loginUser(user_email, user_password){
-
-    /*
-    req.params = {
-        userId: _id from database
-        petId: petfinder id
-    }
-    */
+function loginUser(emailIn, user_password){
+    
+    var dataIn = JSON.stringify({
+                "email": emailIn,
+                "password": user_password,
+            });
+    console.log(dataIn);
+    
     return new Promise((resolve, reject) => {
        $.ajax({
             type: 'POST',
-            data: JSON.stringify({
-                "email": user_email,
-                "password": user_password,
-            }),
+            data: dataIn,
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -647,7 +644,7 @@ function getAllMessages() {
     
 }
 
-function deletePet(user_id, pet_id){
+function deletePet(userIdIn, pet_id){
 	console.log("deletee")
     return new Promise((resolve, reject) => {
        $.ajax({
@@ -659,7 +656,7 @@ function deletePet(user_id, pet_id){
             headers: {
                 'Content-Type': 'application/json',
             },
-            url: "/api/"+user_id+"/:"+pet_id,
+            url: "/api/favourites/"+user_id+"/:"+pet_id,
             dataType: 'json',
             success:function(data) {
 				console.log(data)
@@ -672,18 +669,17 @@ function deletePet(user_id, pet_id){
     });                 
 }
 
-function addPet(user_id, pet_id){
+function addPet(userIdIn, pet_id){
     return new Promise((resolve, reject) => {
        $.ajax({
             type:'POST',
             data: JSON.stringify({
-                    "userId": user_id,
                     "petId": pet_id,
                     }),
             headers: {
                 'Content-Type': 'application/json',
             },
-            url: "/api/addPet/" ,
+            url: "/api/favourites/" + userIdIn,
             dataType: 'json',
             success:function(data) {
                 resolve(data);
@@ -697,10 +693,10 @@ function addPet(user_id, pet_id){
 
 
 function getFavs(){
-    var user_id = sessionStorage.getItem('user_email');
+    var userId = sessionStorage.getItem('userId');
     console.log("get user pets user id is:");
-    console.log(user_id);
-    getUserPets(user_id)
+    console.log(userId);
+    getUserPets(userId)
         .then(
             (item) => {
                 var database_item = JSON.parse(JSON.stringify(item));
@@ -745,20 +741,16 @@ function getFavs(){
         });
 }
 
-function getUserPets(user_id,){
+function getUserPets(userIdIn){
 
-    console.log(user_id);
+    console.log("/api/favourites/"+userIdIn);
     return new Promise((resolve, reject) => {
        $.ajax({
             type:'GET',
-            data: JSON.stringify({
-                    "userId": user_id,
-                    }),
             headers: {
                 'Content-Type': 'application/json',
             },
-            url: "/api/getUserPets/"+user_id ,
-            dataType: 'json',
+            url: "/api/favourites/"+userIdIn,
             success:function(data) {
                 resolve(data);
             },
@@ -793,8 +785,8 @@ var counter = 0;
 $(document).ready(function() {
 
     setTimeout(getLatestMessage, 5000);
-    var user = sessionStorage.getItem('user');
-    /*if(user){
+    var userId = sessionStorage.getItem('userId');
+    /*if(userId){
         //show profile page
         $("#view1").hide();
         $("#view2").hide();
@@ -814,8 +806,8 @@ $(document).ready(function() {
         $("#spotlightView").hide();
         $("#signupView").hide();
         $("#loading").hide();
-		var user = sessionStorage.getItem('user');
-		if(user){ //logged in
+
+		if(userId){ //logged in
 			$("#logout").show();
             $(".alert").show();
 		}
@@ -923,10 +915,9 @@ $("#login").click(function (){
                 showProfileView();
 
                 //setting session storage
-                sessionStorage.setItem('user', database_item);
-                sessionStorage.setItem('user_email', user_email);
+                sessionStorage.setItem('userId', database_item.userId);
                 console.log("user set in session storage: ");
-                console.log( sessionStorage.getItem('user'));
+                console.log( sessionStorage.getItem('userId'));
                 document.getElementById("welcome_greeting").innerHTML = "welcome " + user_email;
                 
         })
@@ -952,8 +943,7 @@ $("#signup").click(function (){
             console.log(JSON.stringify(database_item));
 
             //saving user to session storage
-            sessionStorage.setItem('user', database_item);
-            sessionStorage.setItem('user_email', user_email);
+            sessionStorage.setItem('userId', database_item.userId);
             document.getElementById("welcome_greeting").innerHTML = "welcome " + user_email;
             showProfileView();
         })
@@ -979,8 +969,8 @@ $("#spotlight").click(function (){
     $("#signupView").hide();
     $("#profileView").hide();
     $("#spotlightView").show();
-	var user = sessionStorage.getItem('user');
-    if(user){ //logged in
+	var userId = sessionStorage.getItem('userId');
+    if(userId){ //logged in
         $("#logout").show();
     }
     else{
@@ -990,8 +980,8 @@ $("#spotlight").click(function (){
 });
 
 $("#profile").click(function (){
-    var user = sessionStorage.getItem('user');
-    if(user){ //logged in
+    var userId = sessionStorage.getItem('userId');
+    if(userId){ //logged in
         showProfileView();
     }
     else{

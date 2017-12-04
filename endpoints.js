@@ -95,7 +95,7 @@ exports.getUserPets = function (req, res) {
             console.log("Database connected");
             db = out;
             
-            db.collection("restpect-users").findOne({email: userIdIn}, function (err, item) {
+            db.collection("restpect-users").findOne({_id: new ObjectId(userIdIn)}, function (err, item) {
                if (err) {
                    console.log(err);
                    db.close();
@@ -107,7 +107,7 @@ exports.getUserPets = function (req, res) {
                    res.status(400).json({error: 'user does not exist'});
                }
                else {
-                    var cursor = db.collection("restpect-pets").find({email: userIdIn}).sort({dateAdded: 1}).toArray(function (err, items) {
+                    var cursor = db.collection("restpect-pets").find({userId: userIdIn}).sort({dateAdded: 1}).toArray(function (err, items) {
                        if (err) {
                            console.log(err);
                            db.close();
@@ -117,7 +117,7 @@ exports.getUserPets = function (req, res) {
                            console.log(items, "no records");
                            db.close();
                            res.json({
-                               email: userIdIn,
+                               userId: userIdIn,
                                pets: []
                            });
                        }
@@ -125,7 +125,7 @@ exports.getUserPets = function (req, res) {
                            console.log('pets: ', items);
                            db.close();
                            res.json({
-                               email: userIdIn,
+                               userId: userIdIn,
                                pets: items
                            });
                        }   
@@ -157,7 +157,7 @@ exports.addPet = function (req, res) {
             console.log("Database connected");
             db = out;
 
-            db.collection("restpect-users").findOne({email: userIdIn}, function (err, item) {
+            db.collection("restpect-users").findOne({_id: new ObjectId(userIdIn)}, function (err, item) {
                if (err) {
                    console.log(err);
                    db.close();
@@ -169,8 +169,8 @@ exports.addPet = function (req, res) {
                    res.status(400).json({error: 'user does not exist'});
                }
                else {
-                        db.collection("restpect-pets").findOneAndUpdate({email: userIdIn, petId: petIdIn}, {$set: {   
-                        email: userIdIn,
+                        db.collection("restpect-pets").findOneAndUpdate({userId: userIdIn, petId: petIdIn}, {$set: {   
+                        userId: userIdIn,
                         petId: petIdIn,
                         dateAdded: new Date()
                     }}, {upsert: true, returnOriginal: false}, function (err, item) {
@@ -330,7 +330,7 @@ exports.deletePet = function (req, res) {
         if(err) console.log(err)
             console.log("Database connected");
             db = out;
-            db.collection("restpect-users").findOne({email: userIdIn}, function (err, item) {
+            db.collection("restpect-users").findOne({_id: new ObjectId(userIdIn)}, function (err, item) {
                if (err) {
                    console.log(err);
                    db.close();
@@ -342,7 +342,7 @@ exports.deletePet = function (req, res) {
                    res.status(400).json({error: 'user does not exist'});
                }        
                else {
-                        db.collection("restpect-pets").remove({email: userIdIn, petId: petIdIn}, {w:1}, function(err, numberOfRemovedDocs) {
+                        db.collection("restpect-pets").remove({userId: userIdIn, petId: petIdIn}, {w:1}, function(err, numberOfRemovedDocs) {
                             if (err) {
                                 console.log(err);
                             }
