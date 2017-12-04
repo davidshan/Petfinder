@@ -672,16 +672,23 @@ function deletePet(userIdIn, pet_id){
 }
 
 function addPet(userIdIn, pet_id){
+    
+    var urlIn = "/api/favourites/" + userIdIn;
+    console.log(urlIn);
+    
+    var dataIn = JSON.stringify({
+                    "petId": pet_id,
+                    });
+    console.log(dataIn);
+    
     return new Promise((resolve, reject) => {
        $.ajax({
             type:'POST',
-            data: JSON.stringify({
-                    "petId": pet_id,
-                    }),
+            data: dataIn,
             headers: {
                 'Content-Type': 'application/json',
             },
-            url: "/api/favourites/" + userIdIn,
+            url: urlIn,
             dataType: 'json',
             success:function(data) {
                 resolve(data);

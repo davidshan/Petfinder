@@ -5,7 +5,7 @@
         // implement this
     }
 
-    var id = "";
+    var id = "'5a2587897c14a910409915eb'";
  /* request.post({
             url: 'http://wolf.teach.cs.toronto.edu:3090/secret-message/huang387',
             json: true, // don't forget,

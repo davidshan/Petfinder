@@ -88,14 +88,24 @@ exports.getUserPets = function (req, res) {
         userId: _id from database
     }
     */
-    var userIdIn = req.params.userId;
+    var userIdIn;
+    
+    try {
+    var userIdIn = ObjectId(req.params.userId);
+    }
+    catch (e) {
+        console.log(e);
+        res.status(400).json({error: e});
+        return;
+    }
+    
     console.log("userIDIn: " + userIdIn);
     MongoClient.connect(url, function(err,out){
         if(err) console.log(err)
             console.log("Database connected");
             db = out;
             
-            db.collection("restpect-users").findOne({_id: new ObjectId(userIdIn)}, function (err, item) {
+            db.collection("restpect-users").findOne({_id: userIdIn} , function (err, item) {
                if (err) {
                    console.log(err);
                    db.close();
@@ -147,8 +157,16 @@ exports.addPet = function (req, res) {
     } //Note that this is not the complete schema we have time as well as userID, as well as a comment field.
     //more attributes can be added as necessary.
     */
+    var userIdIn;
     
-    var userIdIn = req.body.userId;
+    try {
+    var userIdIn = ObjectId(req.body.userId);
+    }
+    catch (e) {
+        console.log(e);
+        res.status(400).json({error: e});
+        return;
+    }
     
     var petIdIn = req.body.petId;
     
@@ -157,7 +175,7 @@ exports.addPet = function (req, res) {
             console.log("Database connected");
             db = out;
 
-            db.collection("restpect-users").findOne({_id: new ObjectId(userIdIn)}, function (err, item) {
+            db.collection("restpect-users").findOne({_id: userIdIn}, function (err, item) {
                if (err) {
                    console.log(err);
                    db.close();
@@ -200,7 +218,17 @@ exports.getSpecificPet = function (req, res) {
     }
     */
     
-    var userIdIn = req.params.userId;
+    var userIdIn;
+    
+    try {
+    var userIdIn = ObjectId(req.body.userId);
+    }
+    catch (e) {
+        console.log(e);
+        res.status(400).json({error: e});
+        return;
+    }
+    
     var petIdIn = req.params.petId;
     
     MongoClient.connect(url, function(err,out){
@@ -208,7 +236,7 @@ exports.getSpecificPet = function (req, res) {
             console.log("Database connected");
             db = out;
             
-            db.collection("restpect-users").findOne({_id: new ObjectId(userIdIn)}, function (err, item) {
+            db.collection("restpect-users").findOne({_id: userIdIn}, function (err, item) {
                if (err) {
                    console.log(err);
                    db.close();
@@ -265,7 +293,17 @@ exports.editPet = function (req, res) {
     //more attributes can be added as necessary.
     */
     
-    var userIdIn = req.params.userId;
+    var userIdIn;
+    
+    try {
+    var userIdIn = ObjectId(req.body.userId);
+    }
+    catch (e) {
+        console.log(e);
+        res.status(400).json({error: e});
+        return;
+    }
+    
     
     var petIdIn = req.params.petId;
     
@@ -277,7 +315,7 @@ exports.editPet = function (req, res) {
             console.log("Database connected");
             db = out;
             
-               db.collection("restpect-users").findOne({_id: new ObjectId(userIdIn)}, function (err, item) {
+               db.collection("restpect-users").findOne({_id: userIdIn}, function (err, item) {
                if (err) {
                    console.log(err);
                    db.close();
@@ -322,7 +360,17 @@ exports.deletePet = function (req, res) {
     }
     
     */
-    var userIdIn = req.params.userId;
+    var userIdIn;
+    
+    try {
+    var userIdIn = ObjectId(req.body.userId);
+    }
+    catch (e) {
+        console.log(e);
+        res.status(400).json({error: e});
+        return;
+    }
+    
     
     var petIdIn = req.params.petId;
     
@@ -330,7 +378,7 @@ exports.deletePet = function (req, res) {
         if(err) console.log(err)
             console.log("Database connected");
             db = out;
-            db.collection("restpect-users").findOne({_id: new ObjectId(userIdIn)}, function (err, item) {
+            db.collection("restpect-users").findOne({_id: userIdIn}, function (err, item) {
                if (err) {
                    console.log(err);
                    db.close();

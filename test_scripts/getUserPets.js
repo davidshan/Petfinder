@@ -15,7 +15,7 @@
         }) */
         
         request.get({
-            url: "https://restpect.herokuapp.com/api/favourites/5a247a3938824b161fbe0f9b/",
+            url: "http://localhost:3000/api/favourites/5a258a1438824b161f03661e/",
             json: true, // don't forget,
             /*body: {
             comment: "poo"
