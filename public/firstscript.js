@@ -535,6 +535,7 @@ function showProfileView() {
     $("#signupView").hide();
     $("#profileView").show();
 	$("#logout").show();
+    $(".alert").show();
     getFavs();
 
 }
@@ -558,6 +559,7 @@ function showSignupView() {
 }
 
 function showLoginView() {
+    $(".alert").hide();
     $("#loading").hide();
     $("#view1").hide();
     $("#view2").hide();
@@ -810,9 +812,11 @@ $(document).ready(function() {
 		var user = sessionStorage.getItem('user');
 		if(user){ //logged in
 			$("#logout").show();
+            $(".alert").show();
 		}
 		else{
 			$("#logout").hide();
+            $(".alert").hide();
 		}
     //}
 	var win = $(window);
