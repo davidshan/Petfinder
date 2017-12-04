@@ -215,7 +215,7 @@ app.post('/api/addPet', endpoints.addPet);
 
 app.get('/api/favourites/:userId/:petId', endpoints.getSpecificPet);
 app.put('/api/favourites/:userId/:petId', endpoints.editPet);
-app.delete('/api/favourites/:userId/:petId', endpoints.deletePet);
+app.delete('/api/:userId/:petId', endpoints.deletePet);
 
 app.use(function(req, res){
   res.type('text/html');

@@ -34,6 +34,36 @@ function Favorite(ID) {
     }
 }
 
+//Delete a pet
+function Delete(ID) {
+    var user = sessionStorage.getItem('user_email');
+        if(user){ //logged in      
+            deletePet(user, ID)
+            .then(
+            (item) => {
+                var database_item = item;
+                console.log("Deleted a pet!")
+                console.log(JSON.stringify(database_item));
+
+                //setting session storage
+                // sessionStorage.setItem('user', database_item);
+                // sessionStorage.setItem('user_email', user_email);
+                // console.log("user set in session storage: ");
+                // console.log( sessionStorage.getItem('user'));
+                // document.getElementById("welcome_greeting").innerHTML = "welcome " + user_email;        
+            })
+            .catch(string => {
+                console.log("Error!", string);
+                console.log("Did not delete pet :(")
+            });
+        }
+        else{
+            //shouldn't be here lol
+        }
+    
+}
+
+
 function getPetInfo(id) {
     return new Promise((resolve, reject) => {
         $.ajax({
@@ -463,7 +493,7 @@ function showFavView3(pet_id) {
                 <h4><b>Email:</b> "+ pet_info.email +"</h4>\
                 <h4><b>About "+ pet_info.name +" :</b> </h5>\
                 <h5>"+ pet_info.description +"</h5>\
-                <button onclick=\"Favorite("+pet_info.id+")\" class=\"btn btn-info\">Unfavorite This Pet</button>\
+                <button onclick=\"Delete("+pet_info.id+")\" class=\"btn btn-info\">Unfavorite This Pet</button>\
                 </div>\
                 </div>\
             </div>")
@@ -588,6 +618,29 @@ function loginUser(user_email, user_password){
                 'Content-Type': 'application/json',
             },
             url: "/api/login/" ,
+            dataType: 'json',
+            success:function(data) {
+                resolve(data);
+            },
+            fail:function() {
+                reject("FAILED AJAX");
+            }
+        });
+    });                 
+}
+
+function deletePet(user_id, pet_id){
+    return new Promise((resolve, reject) => {
+       $.ajax({
+            type:'DELETE',
+            data: JSON.stringify({
+                    "userId": user_id,
+                    "petId": pet_id,
+                    }),
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            url: "/api/"+user_id+"/"+pet_id,
             dataType: 'json',
             success:function(data) {
                 resolve(data);

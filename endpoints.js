@@ -88,7 +88,6 @@ exports.getUserPets = function (req, res) {
         userId: _id from database
     }
     */
-    
     var userIdIn = req.params.userId;
     console.log("userIDIn: " + userIdIn);
     MongoClient.connect(url, function(err,out){
@@ -323,18 +322,15 @@ exports.deletePet = function (req, res) {
     }
     
     */
-    
     var userIdIn = req.params.userId;
     
     var petIdIn = req.params.petId;
-    
-    
     
     MongoClient.connect(url, function(err,out){
         if(err) console.log(err)
             console.log("Database connected");
             db = out;
-            db.collection("restpect-users").findOne({_id: new ObjectId(userIdIn)}, function (err, item) {
+            db.collection("restpect-users").findOne({email: userIdIn}, function (err, item) {
                if (err) {
                    console.log(err);
                    db.close();
@@ -346,7 +342,7 @@ exports.deletePet = function (req, res) {
                    res.status(400).json({error: 'user does not exist'});
                }        
                else {
-                        db.collection("restpect-pets").remove({userId: userIdIn, petId: petIdIn}, {w:1}, function(err, numberOfRemovedDocs) {
+                        db.collection("restpect-pets").remove({email: userIdIn, petId: petIdIn}, {w:1}, function(err, numberOfRemovedDocs) {
                             if (err) {
                                 console.log(err);
                             }
@@ -355,7 +351,6 @@ exports.deletePet = function (req, res) {
 
                         });   
                    }
-           
         });
     });
 }
