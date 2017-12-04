@@ -702,10 +702,10 @@ function addPet(userIdIn, pet_id){
 
 
 function getFavs(){
-    var userId = sessionStorage.getItem('userId');
+    var user_id = sessionStorage.getItem('userId');
     console.log("get user pets user id is:");
-    console.log(userId);
-    getUserPets(userId)
+    console.log(user_id);
+    getUserPets(user_id)
         .then(
             (item) => {
                 var database_item = JSON.parse(JSON.stringify(item));

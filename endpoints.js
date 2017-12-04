@@ -160,7 +160,7 @@ exports.addPet = function (req, res) {
     var userIdIn;
     
     try {
-    var userIdIn = ObjectId(req.body.userId);
+    var userIdIn = ObjectId(req.params.userId);
     }
     catch (e) {
         console.log(e);
@@ -221,7 +221,7 @@ exports.getSpecificPet = function (req, res) {
     var userIdIn;
     
     try {
-    var userIdIn = ObjectId(req.body.userId);
+    var userIdIn = ObjectId(req.params.userId);
     }
     catch (e) {
         console.log(e);
