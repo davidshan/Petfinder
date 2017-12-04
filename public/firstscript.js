@@ -8,7 +8,30 @@ var current_view=1;
 
 //Favorite a pet
 function Favorite(ID) {
-	console.log(ID)
+    var user = sessionStorage.getItem('user_email');
+        if(user){ //logged in      
+            addPet(user, ID)
+            .then(
+            (item) => {
+                var database_item = item;
+                console.log("added a pet!")
+                console.log(JSON.stringify(database_item));
+
+                //setting session storage
+                // sessionStorage.setItem('user', database_item);
+                // sessionStorage.setItem('user_email', user_email);
+                // console.log("user set in session storage: ");
+                // console.log( sessionStorage.getItem('user'));
+                // document.getElementById("welcome_greeting").innerHTML = "welcome " + user_email;        
+            })
+            .catch(string => {
+                console.log("Error!", string);
+                console.log("Did not add pet :(")
+            });
+        }
+        else{
+            window.alert("please login first to favourite!")
+    }
 }
 
 function getPetInfo(id) {
@@ -224,6 +247,48 @@ function append_new_entries(list_of_stuff, add_to) {
     }
 }
 
+function append_new_fav_entries(list_of_stuff, add_to) {
+    for(var i = 0; i < 8; i++){
+        $(add_to).append("<div class=\"row\">\
+                                <div class=\"search-result-frame\">\
+                                    <div class=\"search-result-content-frame hidden-xs\">\
+                                          <div class= \"pet-pic-frame\">\
+                                                <img class=\"pet-thumbnail\" src = \" "+list_of_stuff[i].photo.split('?')[0]+"\" width=\"600\" >\
+                                            </div>\
+                                        <div class=\"search-result-pet-info hidden-xs\">\
+                                            <br />\
+                                            <a class='title' id="+ list_of_stuff[i].id +">Hi I'm "+ list_of_stuff[i].name +"!</a>\
+                                            <button onclick=\"Favorite("+list_of_stuff[i].id+")\" class=\"btn btn-info\">Favorite This Pet</button>\
+                                            <h4><b>Size:</b> "+ list_of_stuff[i].size +"</h4>\
+                                            <h4><b>Sex:</b> "+ list_of_stuff[i].sex_code +"</h4>\
+                                            <h4><b>Age:</b> "+ list_of_stuff[i].age +"</h4>\
+                                            <div class=\"search-pet-description\">\
+                                                <h5><b>Description:</b> "+ list_of_stuff[i].description +"</h5>\
+                                            </div>\
+                                               <a class='title small-font' id="+ list_of_stuff[i].id +">...Click here for more info!</a>\
+                                        </div>\
+                                    </div>\
+                                </div>\
+                                <div class=\"search-result-frame-small\">\
+                                    <div class=\"search-result-content-frame-small hidden-sm hidden-md hidden-lg\">\
+                                          <div class= \"pet-pic-frame-small\">\
+                                                <img class=\"pet-thumbnail-small\" src = \" "+list_of_stuff[i].photo.split('?')[0]+"\" width=\"600\" >\
+                                            </div>\
+                                        <div class=\"search-result-pet-info-small\">\
+                                            <h3 class='title' id="+ list_of_stuff[i].id +">Hi I'm "+ list_of_stuff[i].name +"!</h3>\
+                                            <h4><b>Size:</b> "+ list_of_stuff[i].size +"</h4>\
+                                            <h4><b>Sex:</b> "+ list_of_stuff[i].sex_code +"</h4>\
+                                            <h4><b>Age:</b> "+ list_of_stuff[i].age +"</h4>\
+                                            <div class=\"search-pet-description\">\
+                                                <h5><b>Description:</b> "+ list_of_stuff[i].description +"</h5>\
+                                            </div>\
+                                        </div>\
+                                    </div>\
+                                </div>\
+                            </div>")
+    }
+}
+
 function showView2(search_location){
 
     new_get_url = 'https://api.petfinder.com/pet.find?format=json&key=b31df3dfa380bae9b0039e3a91d9126f&location='.concat(search_location);
@@ -323,7 +388,7 @@ function showView3(pet_id) {
         (pet_list) => {
             var pet_info = pet_list;
             console.log(JSON.stringify(pet_info));
-			console.log(pet_info.id)
+			console.log(pet_info.id);
              $('#petprofilename').append("<div>\
                 <h1>"+ pet_info.name +" 's Profile</h1>\
                  </div>\
@@ -343,6 +408,62 @@ function showView3(pet_id) {
                 <h4><b>About "+ pet_info.name +" :</b> </h5>\
                 <h5>"+ pet_info.description +"</h5>\
 				<button onclick=\"Favorite("+pet_info.id+")\" class=\"btn btn-info\">Favorite This Pet</button>\
+                </div>\
+                </div>\
+            </div>")
+        });
+
+    $("#view1").hide();
+    $("#view2").hide();
+    $("#view3").show();
+    $("#loading").hide();
+    current_view = 3;
+}
+
+function showFavView3(pet_id) {
+    // todo: display the information we got from getPetInfo
+    $("#loading").show();
+    $("#view1").hide();
+    $("#view2").hide();
+    $("#view3").hide();
+    $("#spotlightView").hide();
+    $("#loginView").hide();
+    $("#profileView").hide();
+    $("#signupView").hide();
+    $("#back_to_results_button").hide();
+
+    var user = sessionStorage.getItem('user');
+    if(user){ //logged in
+        $("#logout").show();
+    }
+    else{
+        $("#logout").hide();
+    }
+    // test code
+    getPetInfo(pet_id).then( 
+        (pet_list) => {
+            var pet_info = pet_list;
+            console.log(JSON.stringify(pet_info));
+            console.log(pet_info.id)
+             $('#petprofilename').append("<div>\
+                <h1>"+ pet_info.name +" 's Profile</h1>\
+                 </div>\
+              ")
+            $('#singlepetinfo').append("<div class=\"container-fluid\">\
+                <div class= \"row\">\
+                <div class= \"col-sm-5\">\
+                <img class=\"img-responsive\" src = \" "+pet_info.photo.split('?')[0]+"\" width=\"600\" >\
+                </div>\
+                <div class=\"col-sm-7\">\
+                <h4><b>Size:</b> "+ pet_info.size +"</h4>\
+                <h4><b>Sex:</b> "+ pet_info.sex_code +"</h4>\
+                <h4><b>Age:</b> "+ pet_info.age +"</h4>\
+                <h4><b>Contact Info:</b></h4>\
+                <h4><b>Phone:</b> "+ pet_info.phone +"</h4>\
+                <h4><b>Email:</b> "+ pet_info.email +"</h4>\
+                <h4><b>About "+ pet_info.name +" :</b> </h5>\
+                <h5>"+ pet_info.description +"</h5>\
+                <button onclick=\"Favorite("+pet_info.id+")\" class=\"btn btn-info\">Unfavorite This Pet</button>\
                 </div>\
                 </div>\
             </div>")
@@ -384,6 +505,8 @@ function showProfileView() {
     $("#signupView").hide();
     $("#profileView").show();
 	$("#logout").show();
+    getFavs();
+
 }
 
 function showSignupView() {
@@ -476,6 +599,102 @@ function loginUser(user_email, user_password){
     });                 
 }
 
+function addPet(user_id, pet_id){
+    return new Promise((resolve, reject) => {
+       $.ajax({
+            type:'POST',
+            data: JSON.stringify({
+                    "userId": user_id,
+                    "petId": pet_id,
+                    }),
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            url: "/api/addPet/" ,
+            dataType: 'json',
+            success:function(data) {
+                resolve(data);
+            },
+            fail:function() {
+                reject("FAILED AJAX");
+            }
+        });
+    });                 
+}
+
+
+function getFavs(){
+    var user_id = sessionStorage.getItem('user_email');
+    console.log("get user pets user id is:");
+    console.log(user_id);
+    getUserPets(user_id)
+        .then(
+            (item) => {
+                var database_item = JSON.parse(JSON.stringify(item));
+                console.log("returned pet list:");
+                console.log(database_item.pets);
+       
+                var pet_id_list = [];
+
+                for(var i = 0; i < database_item.pets.length; i++){
+                    pet_id_list.push(database_item.pets[i].petId);
+                }
+
+                console.log("pet id list is: " + pet_id_list);
+
+                var pet_obj_list = [];
+                   
+                    for(var j = 0; j < pet_id_list.length; j++){
+                        var promise = new Promise(function(resolve, reject) {
+                        getPetInfo(pet_id_list[j]).then( 
+                            (pet_list) => {
+                                console.log("pet info: " + pet_list);
+                                var pet_info = pet_list;
+                                if(pet_info){
+                                    resolve(pet_info);
+                                }
+                                else{
+                                    reject("pet_info not retrieved");
+                                }
+                            })
+                        });
+                    
+                        promise.then(
+                        (pet_info) => {
+                            pet_obj_list.push(pet_info);
+                            console.log(pet_obj_list);
+                            if(pet_obj_list.length === pet_id_list.length){
+                                append_new_fav_entries(pet_obj_list,'#favs');
+                            }
+                        });
+                        
+                    }
+        });
+}
+
+function getUserPets(user_id,){
+
+    console.log(user_id);
+    return new Promise((resolve, reject) => {
+       $.ajax({
+            type:'GET',
+            data: JSON.stringify({
+                    "userId": user_id,
+                    }),
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            url: "/api/getUserPets/"+user_id ,
+            dataType: 'json',
+            success:function(data) {
+                resolve(data);
+            },
+            fail:function() {
+                reject("FAILED AJAX");
+            }
+        });
+    });                 
+}
 
 var counter = 0;
     
@@ -545,28 +764,29 @@ $(document).ready(function() {
             }
 		
         }
-		//scroll for user favriotes
-		if (current_view == 5 && $(window).scrollTop() + $(window).height() > $(document).height() - 100) {
-            // End of the document reached?
-            new_get_url = 'https://api.petfinder.com/pet.find?format=json&key=b31df3dfa380bae9b0039e3a91d9126f&location='.concat($("#search_location").val());
-            if ($(document).height() - win.height() < (win.scrollTop()+10)) {
-                getPetList(new_get_url, count*8).then(
-                    (pet_list) => {
-                        if (newpet_list[7].id == pet_list[0].id) {
-                            pet_list.splice(0, 1);
-                            }   
-                        newpet_list = pet_list;
-                        console.log(pet_list);
-                        append_new_entries(newpet_list,'#Favorited');
-                        return pet_list;
-                    }
-                ).catch(string => {
-                    console.log("Error!", string);
-                });
-                count++;
-            }
 		
-        }
+  //       //scroll for user favriotes
+		// if (current_view == 5 && $(window).scrollTop() + $(window).height() > $(document).height() - 100) {
+  //           // End of the document reached?
+  //           new_get_url = 'https://api.petfinder.com/pet.find?format=json&key=b31df3dfa380bae9b0039e3a91d9126f&location='.concat($("#search_location").val());
+  //           if ($(document).height() - win.height() < (win.scrollTop()+10)) {
+  //               getPetList(new_get_url, count*8).then(
+  //                   (pet_list) => {
+  //                       if (newpet_list[7].id == pet_list[0].id) {
+  //                           pet_list.splice(0, 1);
+  //                           }   
+  //                       newpet_list = pet_list;
+  //                       console.log(pet_list);
+  //                       append_new_entries(newpet_list,'#Favorited');
+  //                       return pet_list;
+  //                   }
+  //               ).catch(string => {
+  //                   console.log("Error!", string);
+  //               });
+  //               count++;
+  //           }
+		
+  //       }
     });
     /*$("#magic").click(function (){
                 $.ajax({
@@ -594,6 +814,8 @@ $(document).ready(function() {
                 });
             });
     */
+
+
 $("#login").click(function (){
     var user_email = $("#login_email").val();
     var user_password = $("#login_password").val();
@@ -712,6 +934,12 @@ $("#posts").on('click', '.title', function () {
     var id = event.target.id;
     // change to view3
     showView3(id);
+});
+
+$("#favs").on('click', '.title', function () {
+    var id = event.target.id;
+    // change to view3
+    showFavView3(id);
 });
 
 });
