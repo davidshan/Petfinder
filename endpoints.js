@@ -363,7 +363,7 @@ exports.deletePet = function (req, res) {
     var userIdIn;
     
     try {
-    var userIdIn = ObjectId(req.body.userId);
+    var userIdIn = ObjectId(req.params.userId);
     }
     catch (e) {
         console.log(e);
@@ -373,6 +373,7 @@ exports.deletePet = function (req, res) {
     
     
     var petIdIn = req.params.petId;
+    console.log(petIdIn);
     
     MongoClient.connect(url, function(err,out){
         if(err) console.log(err)
@@ -390,7 +391,8 @@ exports.deletePet = function (req, res) {
                    res.status(400).json({error: 'user does not exist'});
                }        
                else {
-                        db.collection("restpect-pets").remove({userId: userIdIn, petId: petIdIn}, {w:1}, function(err, numberOfRemovedDocs) {
+                        console.log({userId: req.params.userId, petId: petIdIn});
+                        db.collection("restpect-pets").remove({userId: req.params.userId, petId: petIdIn}, {w:1}, function(err, numberOfRemovedDocs) {
                             if (err) {
                                 console.log(err);
                             }

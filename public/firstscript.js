@@ -79,7 +79,8 @@ function getPetInfo(id) {
             url: "https://api.petfinder.com/pet.get?format=json&key=b31df3dfa380bae9b0039e3a91d9126f&id=".concat(id).concat('&callback=?'),
             dataType: 'json',
             success:function(data) {
-
+            console.log("getPetInfoId", id);
+            console.log("getPetInfoData", data);
                 new_pet_obj = {
                     name : data["petfinder"]["pet"]["name"]["$t"],
                     id : data["petfinder"]["pet"]["id"]["$t"],
@@ -652,13 +653,13 @@ function deletePet(userIdIn, pet_id){
        $.ajax({
             type:'DELETE',
             data: JSON.stringify({
-                    "userId": user_id,
+                    "userId": userIdIn,
                     "petId": pet_id,
                     }),
             headers: {
                 'Content-Type': 'application/json',
             },
-            url: "/api/favourites/"+user_id+"/:"+pet_id,
+            url: "/api/favourites/"+userIdIn+"/"+pet_id,
             dataType: 'json',
             success:function(data) {
 				console.log(data)

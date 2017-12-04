@@ -15,7 +15,7 @@
         }) */
         
         request.delete({
-            url: "https://restpect.herokuapp.com/api/favourites/5a247a3938824b161fbe0f9b/396414612",
+            url: "http://localhost:3000/api/favourites/5a2596bf38824b161f04ed70/39641461",
             json: true, // don't forget,
         }, function (err,res, body) {
 if(err) {

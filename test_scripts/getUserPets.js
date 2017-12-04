@@ -15,7 +15,7 @@
         }) */
         
         request.get({
-            url: "http://localhost:3000/api/favourites/5a258a1438824b161f03661e/",
+            url: "http://localhost:3000/api/favourites/5a2596bf38824b161f04ed70",
             json: true, // don't forget,
             /*body: {
             comment: "poo"
