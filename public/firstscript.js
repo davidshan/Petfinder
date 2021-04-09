@@ -9,7 +9,8 @@ var bearer = {
     expiry: null,
 }
 // Extra option queries to be appended to the URL
-var default_href = "?limit=8";
+const PETS_PER_PAGE = 8;
+var default_href = "/?limit=".concat(PETS_PER_PAGE);
 var href;
 var end_of_list = false;
 var already_loading = false;
@@ -208,8 +209,8 @@ function getPetList(new_get_url, offset) {
                         console.log("no pet")
                     }
                     else{
-                    
-                        for (var i = 0; i < 8; i++) {
+                        var limit = Math.min(data["animals"].length, PETS_PER_PAGE);
+                        for (var i = 0; i < limit; i++) {
                             petlist[i] = {
                                 name : data["animals"][i]["name"],
                                 id : data["animals"][i]["id"],
@@ -289,7 +290,8 @@ function reject(){
 // this is just a helper function to get rid of the duplicate code
 // for adding in 8 entries everytime we scroll / transition from view1 -> view2
 function append_new_entries(list_of_stuff, add_to) {
-    for(var i = 0; i < 8; i++){
+    var limit = Math.min(list_of_stuff.length, PETS_PER_PAGE);
+    for(var i = 0; i < limit; i++){
         $(add_to).append("<div class=\"row\">\
                                 <div class=\"search-result-frame\">\
                                     <div class=\"search-result-content-frame hidden-xs\">\
@@ -332,7 +334,8 @@ function append_new_entries(list_of_stuff, add_to) {
 }
 
 function append_new_fav_entries(list_of_stuff, add_to) {
-    for(var i = 0; i < 8; i++){
+    var limit = Math.min(list_of_stuff.length, PETS_PER_PAGE);
+    for(var i = 0; i < limit; i++){
         $(add_to).append("<div class=\"row\">\
                                 <div class=\"search-result-frame\">\
                                     <div class=\"search-result-content-frame hidden-xs\">\
@@ -375,9 +378,12 @@ function append_new_fav_entries(list_of_stuff, add_to) {
 
 function showView2(search_location){
     if (href) {
-        new_get_url = 'https://api.petfinder.com/'.concat(href);
+        new_get_url = 'https://api.petfinder.com'.concat(href);
     } else {
-        new_get_url = 'https://api.petfinder.com/v2/animals?limit=8&location='.concat(search_location);
+        new_get_url = 'https://api.petfinder.com/v2/animals'
+            .concat(default_href)
+            .concat('&location=')
+            .concat(search_location);
     }
 
     getPetList(new_get_url, 0).then(
@@ -899,9 +905,9 @@ $(document).ready(function() {
                 already_loading = true;
                 getPetList(new_get_url, count*8).then(
                     (pet_list) => {
-                        if (newpet_list[7].id == pet_list[0].id) {
-                            pet_list.splice(0, 1);
-                        }   
+                        //if (newpet_list[7].id == pet_list[0].id) {
+                        //    pet_list.splice(0, 1);
+                        //}   
                         
                         newpet_list = pet_list;
                         console.log(pet_list);
