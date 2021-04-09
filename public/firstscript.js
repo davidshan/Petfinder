@@ -4,6 +4,14 @@ var integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=";
 var crossorigin="anonymous";
 var newpet_list;
 var current_view=1;
+var bearer = {
+    token: null,
+    expiry: null,
+}
+// Extra option queries to be appended to the URL
+var href;
+
+const API_BASE_URL = ""
 
 
 //Favorite a pet
@@ -68,64 +76,66 @@ function Delete(ID) {
 
 function getPetInfo(id) {
     return new Promise((resolve, reject) => {
-        $.ajax({
-            type:'GET',
-            data : {},
-            headers: {
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*',
-                'Access-Control-Allow-Methods': 'POST, GET, OPTIONS',
-                'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept'
-            },
-            url: "https://api.petfinder.com/pet.get?format=json&key=b31df3dfa380bae9b0039e3a91d9126f&id=".concat(id).concat('&callback=?'),
-            dataType: 'json',
-            success:function(data) {
+        getBearerToken().then((token) => {
+            $.ajax({
+                type:'GET',
+                headers: {
+                    "Authorization": "Bearer " + token,
+                },
+                dataType: 'json',
+                crossDomain: true,
+                url: 'https://api.petfinder.com/v2/animals/'.concat(id),
+                success:function(data) {
 
-                new_pet_obj = {
-                    name : data["petfinder"]["pet"]["name"]["$t"],
-                    id : data["petfinder"]["pet"]["id"]["$t"],
-                    age : data["petfinder"]["pet"]["age"]["$t"],
-                    size : data["petfinder"]["pet"]["size"]["$t"],
-                    description : data["petfinder"]["pet"]["description"]["$t"],
-                    breed : data["petfinder"]["pet"]["breeds"]["breed"]["$t"],
-                    sex_code : data["petfinder"]["pet"]["sex"]["$t"],
-                    photo : data["petfinder"]["pet"]["media"]["photos"]["photo"][0]["$t"],
+                    new_pet_obj = {
+                        name : data["animal"]["name"],
+                        id : data["animal"]["id"],
+                        age : data["animal"]["age"],
+                        size : data["animal"]["size"],
+                        description : data["animal"]["description"],
+                        breed : data["animal"]["breeds"]["primary"],
+                        sex_code : data["animal"]["gender"],
+                        photo : data["animal"]["photos"][0] && data["animal"]["photos"][0]["small"],
+                        
+                        phone : data["animal"]["contact"]["phone"],
+                        city : data["animal"]["contact"]["address"]["city"],
+                        state : data["animal"]["contact"]["address"]["state"],
+                        email : data["animal"]["contact"]["email"],
+                        address : data["animal"]["contact"]["address"]["address1"],
+                        zip : data["animal"]["contact"]["address"]["postcode"],
+                    }
                     
-                    phone : data["petfinder"]["pet"]["contact"]["phone"]["$t"],
-                    city : data["petfinder"]["pet"]["contact"]["city"]["$t"],
-                    state : data["petfinder"]["pet"]["contact"]["state"]["$t"],
-                    email : data["petfinder"]["pet"]["contact"]["email"]["$t"],
-                    address : data["petfinder"]["pet"]["contact"]["address1"]["$t"],
-                    zip : data["petfinder"]["pet"]["contact"]["zip"]["$t"],
-                }
-                
-                        if (new_pet_obj["name"] == null) {
-                            new_pet_obj["name"] = "No Name!";
-                        }
-                        if (new_pet_obj["age"] == null) {
-                            new_pet_obj["age"] = "Unknown";
-                        }
-                        if (new_pet_obj["size"] == null) {
-                            new_pet_obj["size"] = "Unknown";
-                        }
-                        if (new_pet_obj["sex_code"] == null) {
-                            new_pet_obj["sex_code"] = "Unknown";
-                        }
-                        if (new_pet_obj["phone"] == null) {
-                            new_pet_obj["phone"] = "Unknown";
-                        }
-                        if (new_pet_obj["email"] == null) {
-                            new_pet_obj["email"] = "Unknown";
-                        }
-                        if (new_pet_obj["description"] == null) {
-                            new_pet_obj["description"] = "No description";
-                        }
+                            if (new_pet_obj["name"] == null) {
+                                new_pet_obj["name"] = "No Name!";
+                            }
+                            if (new_pet_obj["age"] == null) {
+                                new_pet_obj["age"] = "Unknown";
+                            }
+                            if (new_pet_obj["size"] == null) {
+                                new_pet_obj["size"] = "Unknown";
+                            }
+                            if (new_pet_obj["sex_code"] == null) {
+                                new_pet_obj["sex_code"] = "Unknown";
+                            }
+                            if (new_pet_obj["phone"] == null) {
+                                new_pet_obj["phone"] = "Unknown";
+                            }
+                            if (new_pet_obj["email"] == null) {
+                                new_pet_obj["email"] = "Unknown";
+                            }
+                            if (new_pet_obj["description"] == null) {
+                                new_pet_obj["description"] = "No description";
+                            }
+                            if (new_pet_obj["photo"] == null) {
+                                new_pet_obj["photo"] = "../img/petsbest-logo.png";
+                            }
 
-                resolve(new_pet_obj);
-             },
-             fail:function() {
-                reject("FAILED AJAX");
-            }
+                    resolve(new_pet_obj);
+                },
+                error:function() {
+                    reject("FAILED AJAX");
+                }
+            });
         });
     });                 
 }
@@ -150,75 +160,109 @@ function infoAggregator(url, n) {
     return Promise.all(promises);
 }
 */
+
+function getBearerToken() {
+    var token = bearer.token;
+    var expiry = bearer.expiry;
+    console.log("ASDF");
+
+    return new Promise((resolve, reject) => {
+        if ( !token || !expiry || (Date.now() >= expiry) ) {
+            $.ajax({
+                type:'POST',
+                data: 'grant_type=client_credentials&client_id=DTdWyITU3V8NM3cZXQKlNAOYW8ieZwKhwLvTrYGWGBRm74J5vz&client_secret=ljEgDYihztd7y0GYY0ROynxHqkD1JtdzNld7gnct',
+                url: 'https://api.petfinder.com/v2/oauth2/token',
+                success:function(data) {
+                    bearer.token = data.access_token;
+                    bearer.expiry = Date.now() + data.expiry * 1000;
+                    resolve(bearer.token);
+                },
+                fail:function() {
+                    reject("FAILED AJAX");
+                }
+            })
+        } else {
+            resolve(bearer.token);
+        }
+    });
+}
+
 function getPetList(new_get_url, offset) {
     return new Promise((resolve, reject) => {
-        $.ajax({
-            type:'GET',
-            data : {},
-            headers: {
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*',
-                'Access-Control-Allow-Methods': 'POST, GET, OPTIONS',
-                'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept'
-            },
-            url: new_get_url.concat('&count=8&offset=').concat(offset).concat('&callback=?'),
-            dataType: 'json',
-            success:function(data) {
-                petlist = [];
-				// If we get no pets
-				if (data["petfinder"]["pets"] == null){
-					console.log("no pet")
-				}
-				else{
-				
-					for (var i = 0; i < 8; i++) {
-						petlist[i] = {
-							name : data["petfinder"]["pets"]["pet"][i]["name"]["$t"],
-							id : data["petfinder"]["pets"]["pet"][i]["id"]["$t"],
-							age : data["petfinder"]["pets"]["pet"][i]["age"]["$t"],
-							size : data["petfinder"]["pets"]["pet"][i]["size"]["$t"],
-							description : data["petfinder"]["pets"]["pet"][i]["description"]["$t"],
-							breed : data["petfinder"]["pets"]["pet"][i]["breeds"]["breed"]["$t"],
-							sex_code : data["petfinder"]["pets"]["pet"][i]["sex"]["$t"],
-							photo : data["petfinder"]["pets"]["pet"][i]["media"]["photos"]["photo"][0]["$t"],
-                            phone : data["petfinder"]["pets"]["pet"][i]["contact"]["phone"]["$t"],
-                            city : data["petfinder"]["pets"]["pet"][i]["contact"]["city"]["$t"],
-                            state : data["petfinder"]["pets"]["pet"][i]["contact"]["state"]["$t"],
-                            email : data["petfinder"]["pets"]["pet"][i]["contact"]["email"]["$t"],
-                            address : data["petfinder"]["pets"]["pet"][i]["contact"]["address1"]["$t"],
-                            zip : data["petfinder"]["pets"]["pet"][i]["contact"]["zip"]["$t"],
-						};
-                        
-                        if (petlist[i]["name"] == null) {
-                            petlist[i]["name"] = "an unnamed pet";
+        getBearerToken().then((token) => {
+            console.log("AAAAAAA" + token)
+            $.ajax({
+                type:'GET',
+                headers: {
+                    "Authorization": "Bearer " + token,
+                },
+                dataType: 'json',
+                crossDomain: true,
+                url: new_get_url.concat('&limit=8'),
+                success:function(data) {
+                    petlist = [];
+                    console.log("bbbbbb" + JSON.stringify(data));
+                    // If we get no pets
+                    if (data["animals"] == null){
+                        console.log("no pet")
+                    }
+                    else{
+                    
+                        for (var i = 0; i < 8; i++) {
+                            petlist[i] = {
+                                name : data["animals"][i]["name"],
+                                id : data["animals"][i]["id"],
+                                age : data["animals"][i]["age"],
+                                size : data["animals"][i]["size"],
+                                description : data["animals"][i]["description"],
+                                breed : data["animals"][i]["breeds"]["primary"],
+                                sex_code : data["animals"][i]["gender"],
+                                photo : data["animals"][i]["photos"][0] && data["animals"][i]["photos"][0]["small"],
+                                phone : data["animals"][i]["contact"]["phone"],
+                                city : data["animals"][i]["contact"]["address"]["city"],
+                                state : data["animals"][i]["contact"]["address"]["state"],
+                                email : data["animals"][i]["contact"]["email"],
+                                address : data["animals"][i]["contact"]["address"]["address1"],
+                                zip : data["animals"][i]["contact"]["address"]["postcode"],
+                            };
+                            
+                            if (petlist[i]["name"] == null) {
+                                petlist[i]["name"] = "an unnamed pet";
+                            }
+                            if (petlist[i]["age"] == null) {
+                                petlist[i]["age"] = "Unknown";
+                            }
+                            if (petlist[i]["size"] == null) {
+                                petlist[i]["size"] = "Unknown";
+                            }
+                            if (petlist[i]["sex_code"] == null) {
+                                petlist[i]["sex_code"] = "Unknown";
+                            }
+                            if (petlist[i]["phone"] == null) {
+                                petlist[i]["phone"] = "Unknown";
+                            }
+                            if (petlist[i]["email"] == null) {
+                                petlist[i]["email"] = "Unknown";
+                            }
+                            if (petlist[i]["description"] == null) {
+                                petlist[i]["description"] = "No description.";
+                            }
+                            if (petlist[i]["photo"] == null) {
+                                petlist[i]["photo"] = "../img/petsbest-logo.png";
+                            }
+                            
                         }
-                        if (petlist[i]["age"] == null) {
-                            petlist[i]["age"] = "Unknown";
-                        }
-                        if (petlist[i]["size"] == null) {
-                            petlist[i]["size"] = "Unknown";
-                        }
-                        if (petlist[i]["sex_code"] == null) {
-                            petlist[i]["sex_code"] = "Unknown";
-                        }
-                        if (petlist[i]["phone"] == null) {
-                            petlist[i]["phone"] = "Unknown";
-                        }
-                        if (petlist[i]["email"] == null) {
-                            petlist[i]["email"] = "Unknown";
-                        }
-                        if (petlist[i]["description"] == null) {
-                            petlist[i]["description"] = "No description.";
-                        }
-						
-					}
-					console.log(offset + " " + petlist)
-				}
-                resolve(petlist);
-             },
-             fail:function() {
-                reject("FAILED AJAX");
-            }
+                        console.log(offset + " " + petlist)
+                    }
+                    resolve(petlist);
+                },
+                error:function(jqXHR, textStatus) {
+                    var status = jqXHR.status;
+                    console.log("FAILED AJAXAA");
+                    console.log(jqXHR);
+                    resolve([]);
+                }
+            });
         });
     });                 
 }
@@ -323,7 +367,7 @@ function append_new_fav_entries(list_of_stuff, add_to) {
 
 function showView2(search_location){
 
-    new_get_url = 'https://api.petfinder.com/pet.find?format=json&key=b31df3dfa380bae9b0039e3a91d9126f&location='.concat(search_location);
+    new_get_url = 'https://api.petfinder.com/v2/animals?location='.concat(search_location);
     getPetList(new_get_url, 0).then(
         (pet_list) => {
 			if(pet_list.length == 0){
@@ -362,7 +406,7 @@ function showView2(search_location){
 				console.log(pet_list);
 			}
 			newpet_list = pet_list;
-			console.log(newpet_list);
+			console.log(JSON.stringify(newpet_list));
 			
 			////////////////////////////////////////////////////////////////////////////
 			
@@ -537,7 +581,7 @@ function showProfileView() {
     $("#signupView").hide();
     $("#profileView").show();
 	$("#logout").show();
-    $(".alert").show();
+    //$(".alert").show();
 	current_view = 7;
 	$("#favs").html('');
     getFavs();
@@ -780,9 +824,11 @@ function getLatestMessage() {
         success: function(data) {
             var message;
             if ( (data['messages'].length == 0) || (data['messages'][0]['data'] == null) ) {
-                message = "No New Messages";
+                $(".alert").hide();
+                //message = "No New Messages";
             }
             else {
+                $(".alert").show()
                 message = data['messages'][0]['data'];
             }
 
@@ -817,14 +863,15 @@ $(document).ready(function() {
         $("#spotlightView").hide();
         $("#signupView").hide();
         $("#loading").hide();
+        $(".alert").hide();
 		var user = sessionStorage.getItem('user');
 		if(user){ //logged in
 			$("#logout").show();
-            $(".alert").show();
+            //$(".alert").show();
 		}
 		else{
 			$("#logout").hide();
-            $(".alert").hide();
+            //$(".alert").hide();
 		}
     //}
 	var win = $(window);
@@ -834,7 +881,7 @@ $(document).ready(function() {
 	win.scroll(function() {
         if (current_view == 2 && $(window).scrollTop() + $(window).height() > $(document).height() - 100) {
             // End of the document reached?
-            new_get_url = 'https://api.petfinder.com/pet.find?format=json&key=b31df3dfa380bae9b0039e3a91d9126f&location='.concat($("#search_location").val());
+            new_get_url = 'https://api.petfinder.com/v2/animals&location='.concat(search_location);
             if ($(document).height() - win.height() < (win.scrollTop()+10)) {
                 getPetList(new_get_url, count*8).then(
                     (pet_list) => {
