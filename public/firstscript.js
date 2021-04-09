@@ -9,7 +9,10 @@ var bearer = {
     expiry: null,
 }
 // Extra option queries to be appended to the URL
+var default_href = "?limit=8";
 var href;
+var end_of_list = false;
+var already_loading = false;
 
 const API_BASE_URL = ""
 
@@ -190,7 +193,6 @@ function getBearerToken() {
 function getPetList(new_get_url, offset) {
     return new Promise((resolve, reject) => {
         getBearerToken().then((token) => {
-            console.log("AAAAAAA" + token)
             $.ajax({
                 type:'GET',
                 headers: {
@@ -198,10 +200,9 @@ function getPetList(new_get_url, offset) {
                 },
                 dataType: 'json',
                 crossDomain: true,
-                url: new_get_url.concat('&limit=8'),
+                url: new_get_url,
                 success:function(data) {
                     petlist = [];
-                    console.log("bbbbbb" + JSON.stringify(data));
                     // If we get no pets
                     if (data["animals"] == null){
                         console.log("no pet")
@@ -251,6 +252,12 @@ function getPetList(new_get_url, offset) {
                                 petlist[i]["photo"] = "../img/petsbest-logo.png";
                             }
                             
+                            if (data["pagination"]["_links"]["next"] && 
+                                    data["pagination"]["_links"]["next"].href) {
+                                href = data["pagination"]["_links"]["next"].href;
+                            } else {
+                                end_of_list = true;
+                            }
                         }
                         console.log(offset + " " + petlist)
                     }
@@ -321,6 +328,7 @@ function append_new_entries(list_of_stuff, add_to) {
                                 </div>\
                             </div>")
     }
+    already_loading = false;
 }
 
 function append_new_fav_entries(list_of_stuff, add_to) {
@@ -366,8 +374,12 @@ function append_new_fav_entries(list_of_stuff, add_to) {
 }
 
 function showView2(search_location){
+    if (href) {
+        new_get_url = 'https://api.petfinder.com/'.concat(href);
+    } else {
+        new_get_url = 'https://api.petfinder.com/v2/animals?limit=8&location='.concat(search_location);
+    }
 
-    new_get_url = 'https://api.petfinder.com/v2/animals?location='.concat(search_location);
     getPetList(new_get_url, 0).then(
         (pet_list) => {
 			if(pet_list.length == 0){
@@ -876,18 +888,20 @@ $(document).ready(function() {
     //}
 	var win = $(window);
 	var count = 1;
+    var search_location = $("#search_location").val();
 	
 	// Each time the user scrolls
 	win.scroll(function() {
         if (current_view == 2 && $(window).scrollTop() + $(window).height() > $(document).height() - 100) {
             // End of the document reached?
-            new_get_url = 'https://api.petfinder.com/v2/animals&location='.concat(search_location);
-            if ($(document).height() - win.height() < (win.scrollTop()+10)) {
+            new_get_url = 'https://api.petfinder.com'.concat(href);
+            if ( !already_loading && ($(document).height() - win.height() < (win.scrollTop()+10)) && !end_of_list) {
+                already_loading = true;
                 getPetList(new_get_url, count*8).then(
                     (pet_list) => {
                         if (newpet_list[7].id == pet_list[0].id) {
                             pet_list.splice(0, 1);
-                            }   
+                        }   
                         
                         newpet_list = pet_list;
                         console.log(pet_list);
