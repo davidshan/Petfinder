@@ -1,6 +1,6 @@
 var MongoClient = require('mongodb').MongoClient;
 var ObjectId = require('mongodb').ObjectId; 
-var url = "mongodb://csc309f:csc309fall@ds117316.mlab.com:17316/csc309db";
+var url = "mongodb+srv://dbUser:dbUserPassword@cluster0.twoaq.mongodb.net/Petfinder?retryWrites=true&w=majority";
 
 /*
 expected:
@@ -21,7 +21,7 @@ exports.login = function (req, res) {
     MongoClient.connect(url, function(err,out){
         if(err) console.log(err)
             console.log("Database connected");
-            db = out;
+            db = out.db("Petfinder");
 
             console.log("db find one user");
            var cursor = db.collection("restpect-users").findOne({email: emailIn, password: passIn}, {_id: true}, function (err, item) {
@@ -55,7 +55,7 @@ exports.signup = function (req, res) {
     MongoClient.connect(url, function(err,out){
         if(err) console.log(err)
             console.log("Database connected");
-            db = out;
+            db = out.db("Petfinder");
 
             console.log("db find one user and replace");
             var cursor = db.collection("restpect-users").findOneAndReplace({email: emailIn}, {email: emailIn, password: passIn},
@@ -93,7 +93,7 @@ exports.getUserPets = function (req, res) {
     MongoClient.connect(url, function(err,out){
         if(err) console.log(err)
             console.log("Database connected");
-            db = out;
+            db = out.db("Petfinder");
             
             db.collection("restpect-users").findOne({email: userIdIn}, function (err, item) {
                if (err) {
@@ -155,7 +155,7 @@ exports.addPet = function (req, res) {
     MongoClient.connect(url, function(err,out){
         if(err) console.log(err)
             console.log("Database connected");
-            db = out;
+            db = out.db("Petfinder");
 
             db.collection("restpect-users").findOne({email: userIdIn}, function (err, item) {
                if (err) {
@@ -206,7 +206,7 @@ exports.getSpecificPet = function (req, res) {
     MongoClient.connect(url, function(err,out){
         if(err) console.log(err)
             console.log("Database connected");
-            db = out;
+            db = out.db("Petfinder");
             
             db.collection("restpect-users").findOne({_id: new ObjectId(userIdIn)}, function (err, item) {
                if (err) {
@@ -275,7 +275,7 @@ exports.editPet = function (req, res) {
     MongoClient.connect(url, function(err,out){
         if(err) console.log(err)
             console.log("Database connected");
-            db = out;
+            db = out.db("Petfinder");
             
                db.collection("restpect-users").findOne({_id: new ObjectId(userIdIn)}, function (err, item) {
                if (err) {
@@ -329,7 +329,7 @@ exports.deletePet = function (req, res) {
     MongoClient.connect(url, function(err,out){
         if(err) console.log(err)
             console.log("Database connected");
-            db = out;
+            db = out.db("Petfinder");
             db.collection("restpect-users").findOne({email: userIdIn}, function (err, item) {
                if (err) {
                    console.log(err);
@@ -363,7 +363,7 @@ exports.addMessage = function (req, res) {
   MongoClient.connect(url, function(err, out){
     if(err) console.log(err);
     console.log("Database connected");
-    db = out;
+    db = out.db("Petfinder");
 
     console.log("Message: " + req.body.data);
     var key;
@@ -395,11 +395,11 @@ exports.getMessages = function (req, res) {
   MongoClient.connect(url, function(err, out){
     if(err) console.log(err);
     console.log("Database connected");
-    db = out;
+    db = out.db("Petfinder");
 
     db.collection("restpect-messages").find( {} ).sort({timestamp: -1}).toArray(function(err, docs) {
       if (err) {
-        console.log("Error");
+        console.log("Error:" + err);
       }
       else {
         db.close();
@@ -418,7 +418,7 @@ exports.deleteMessage = function (req, res) {
   MongoClient.connect(url, function(err, out){
     if(err) console.log(err);
     console.log("Database connected");
-    db = out;
+    db = out.db("Petfinder");
 
     try {
       db.collection("restpect-messages").deleteOne( {"_id": req.params.messageId} )
